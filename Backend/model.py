@@ -36,6 +36,15 @@ class Book(db.Model):
     section_id = db.Column(db.Integer, db.ForeignKey('section.id'), nullable=False)
     section = db.relationship('Section', backref=db.backref('books', lazy=True))
 
+    def __init__(self, name, content, isbn, author, section_id):
+        self.name = name
+        self.content = content
+        self.isbn = isbn
+        self.author = author
+        self.date_issued = datetime.now()
+        self.return_date = datetime.now()
+        self.section_id = section_id
+
 class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
