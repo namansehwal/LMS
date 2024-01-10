@@ -7,10 +7,23 @@ bcrypt = Bcrypt()
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(50), unique=True, nullable=False)
+    username = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(50), nullable=False)
-    user_type = db.Column(db.String(20), nullable=False)  # Librarian/GeneralUser
+    user_type = db.Column(db.String(20), nullable=False)
+
+    def __init__(self, username, email, password, user_type='User'):
+        self.username = username
+        self.email = email
+        self.password = password
+        self.user_type = user_type
+
+class Blacklist(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    token = db.Column(db.String(500), nullable=False)
+
+    def __init__(self, token):
+        self.token = token
 
 
 class Section(db.Model):

@@ -16,7 +16,7 @@ def bookAPI():
         missing_keys = [key for key in required_keys if key not in data]
 
         if missing_keys:
-            return jsonify({"error": f"Missing required keys: {', '.join(missing_keys)}"}), 400
+            return jsonify({"error": f"Missing required keys : {', '.join(missing_keys)}"}), 400
 
         new_book = Book(
             name=data['name'],
