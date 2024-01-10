@@ -1,0 +1,4 @@
+flask
+Flask-RESTful
+flask_sqlalchemy
+flask_bcrypt
