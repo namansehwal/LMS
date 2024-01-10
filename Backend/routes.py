@@ -1,5 +1,6 @@
 from api.auth import register_user, login_user
-from api.section import sectionAPI, bookAPI
+from api.section import sectionAPI
+from api.book import bookAPI
 from app import app
 
 

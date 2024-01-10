@@ -24,6 +24,8 @@ class Section(db.Model):
         self.date_created = datetime.now()
         self.description = description
 
+           
+
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -44,6 +46,19 @@ class Book(db.Model):
         self.date_issued = datetime.now()
         self.return_date = datetime.now()
         self.section_id = section_id
+
+    def __serialize__(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "content": self.content,
+            "isbn": self.isbn,
+            "author": self.author,
+            "date_issued": self.date_issued,
+            "return_date": self.return_date,
+            "section_id": self.section_id
+        }
+
 
 class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
