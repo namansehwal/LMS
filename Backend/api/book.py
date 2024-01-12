@@ -1,8 +1,9 @@
 from flask import request, jsonify
 from model import db, Book
+from flask_jwt_extended import jwt_required
 
+@jwt_required()
 def bookAPI():
-
     if request.method == 'GET':
         books_query = Book.query.all()
         books = []
