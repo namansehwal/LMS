@@ -42,7 +42,13 @@ def login_user():
             return jsonify({"message": "Invalid credentials. Wrong Password Entered!!"}), 401
 
         access_token = create_access_token(identity=user.id)
-        return jsonify({"access_token": access_token}), 200
+        
+
+        return jsonify({"access_token": access_token,
+                        "role": user.user_type,
+                        "username": user.username,
+                        "email": user.email,   
+                        }), 200
 
 @jwt_required()
 def user_details():

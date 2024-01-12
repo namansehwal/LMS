@@ -8,7 +8,7 @@ def librarian_setup():
                     username='librarian',
                     email='librarian@gmail.com',
                     password= bcrypt.generate_password_hash('librarian').decode("utf-8"),
-                    user_type='admin'
+                    user_type='librarian'
                     )
                 
                 db.session.add(new_user)

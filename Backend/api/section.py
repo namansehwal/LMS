@@ -2,7 +2,7 @@ from flask import request, jsonify, Response
 from model import db, Section
 from flask_jwt_extended import jwt_required
 
-@jwt_required()
+# @jwt_required()
 def sectionAPI():
     if request.method == 'GET':
         sections = Section.query.all()

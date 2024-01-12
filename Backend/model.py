@@ -12,7 +12,7 @@ class User(db.Model):
     password = db.Column(db.String(50), nullable=False)
     user_type = db.Column(db.String(20), nullable=False)
 
-    def __init__(self, username, email, password, user_type='User'):
+    def __init__(self, username, email, password, user_type='user'):
         self.username = username
         self.email = email
         self.password = password
@@ -78,7 +78,7 @@ class Request(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
     request_date = db.Column(db.DateTime, nullable=False)
-    status = db.Column(db.String(20), nullable=False)  # Pending/Approved/Rejected
+    status = db.Column(db.String(20), nullable=False)  # Pending/Approved
 
 class Rating(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
