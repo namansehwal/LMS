@@ -1,7 +1,6 @@
 <template>
     <div class="container mt-5">
-      <h2>Access Logs</h2>
-  
+
       <!-- Display Access Logs and Filter -->
       <div class="card mt-4">
         <div class="card-header">
@@ -77,6 +76,38 @@
   </script>
   
   <style scoped>
-  /* Add custom styles if needed */
-  </style>
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+h2 {
+  color: #007bff;
+}
+
+.card {
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.card-header {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.form-label {
+  font-weight: bold;
+}
+
+.form-select {
+  width: 200px;
+}
+
+.table {
+  margin-top: 20px;
+}
+</style>
+
   
