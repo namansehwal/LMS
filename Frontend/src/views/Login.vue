@@ -14,11 +14,11 @@
               v-model="isLoginForm"
               @change="changeBackgroundImage"
             />
-            <label class="form-check-label common-text" for="toggleForm" :style="{ color: toggleButtonColor }">
+            <label class="form-check-label common-text" for="toggleForm" :style="{ color: toggleButtonTextColor, fontWeight: 'bold' }">
               {{ isLoginForm ? 'Switch to Register' : 'Switch to Login' }}
             </label>
           </div>
-          <form @submit.prevent="isLoginForm ? login : register" :style="{ border: formBorderStyle }">
+          <form @submit.prevent="isLoginForm ? login : register" :style="{ border: 'none' }">
             <div class="mb-3">
               <label for="email" class="form-label text-white">Email address</label>
               <input v-model="email" type="email" class="form-control" id="email" required>
@@ -171,6 +171,9 @@ export default {
   },
   computed: {
     toggleButtonColor() {
+      return this.isLoginForm ? '#db6334' : '#e73ca0';
+    },
+    toggleButtonTextColor() {
       return this.isLoginForm ? '#db6334' : '#e73ca0';
     },
   },
