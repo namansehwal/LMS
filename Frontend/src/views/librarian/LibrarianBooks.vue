@@ -27,11 +27,16 @@
             </div>
           </div>
           <div class="mb-3">
+            <label for="number_of_pages" class="form-label">Number of Pages</label>
+            <input v-model="newBook.number_of_pages" type="number" class="form-control" id="number_of_pages" required>
+          </div>
+          <div class="mb-3">
             <label for="sectionId" class="form-label">Section</label>
             <select v-model="newBook.section_id" class="form-control" id="sectionId" required>
               <option v-for="section in sections" :key="section.id" :value="section.id">{{ section.name }}</option>
             </select>
           </div>
+
           <button type="submit" class="btn btn-primary">Add Book</button>
         </form>
       </div>
@@ -49,10 +54,11 @@
               <th>ID</th>
               <th>Name</th>
               <th>Content</th>
+              <th>Pages</th>
               <th>ISBN</th>
               <th>Author</th>
-              <th>Date Issued</th>
-              <th>Return Date</th>
+              <th>Date Created</th>
+              <th>Date Updated</th>
               <th>Section ID</th>
               <th>Actions</th>
             </tr>
@@ -62,10 +68,11 @@
               <td>{{ book.id }}</td>
               <td>{{ book.name }}</td>
               <td>{{ book.content }}</td>
+              <td>{{ book.number_of_pages }}</td>
               <td>{{ book.isbn }}</td>
               <td>{{ book.author }}</td>
-              <td>{{ book.date_issued }}</td>
-              <td>{{ book.return_date }}</td>
+              <td>{{ book.date_created }}</td>
+              <td>{{ book.date_updated }}</td>
               <td>{{ book.section_id }}</td>
               <td>
                 <button @click="editBook(book)" class="btn btn-warning btn-sm mr-2">Edit</button>
@@ -76,7 +83,7 @@
         </table>
       </div>
     </div>
-  
+
     <!-- Edit Book Form -->
     <div v-if="editingBook" class="card mt-4 mb-4">
       <div class="card-header bg-success text-white">
@@ -92,7 +99,7 @@
             <label for="editContent" class="form-label">Content</label>
             <textarea v-model="editingBook.content" class="form-control" id="editContent" rows="1" required></textarea>
           </div>
-            <div class="row">
+          <div class="row">
             <div class="col-md-6 mb-3">
               <label for="editISBN" class="form-label">ISBN</label>
               <input v-model="editingBook.isbn" type="text" class="form-control" id="editISBN" required>
@@ -102,6 +109,11 @@
               <input v-model="editingBook.author" type="text" class="form-control" id="editAuthor" required>
             </div>
           </div>
+          <div class="mb-3">
+            <label for="editnumber_of_pages" class="form-label">Number of Pages</label>
+            <input v-model="editingBook.number_of_pages" type="number" class="form-control" id="number_of_pages" required>
+          </div>
+
           <div class="mb-3">
             <label for="editSectionId" class="form-label">Section</label>
             <select v-model="editingBook.section_id" class="form-control" id="editSectionId" required>
@@ -124,7 +136,8 @@ export default {
         content: '',
         isbn: '',
         author: '',
-        section_id: ''
+        section_id: '',
+        number_of_pages: ''
       },
       books: [],
       editingBook: null,
@@ -146,7 +159,8 @@ export default {
           content: '',
           isbn: '',
           author: '',
-          section_id: ''
+          section_id: '',
+          number_of_pages: ''
         };
       } catch (error) {
         console.error('Add Book failed:', error);
@@ -179,7 +193,8 @@ export default {
           content: this.editingBook.content,
           isbn: this.editingBook.isbn,
           author: this.editingBook.author,
-          section_id: this.editingBook.section_id
+          section_id: this.editingBook.section_id,
+          number_of_pages: this.editingBook.number_of_pages,
         }).then(() => {
           // alert response message
           alert(this.editingBook.name + ' updated successfully !!')

@@ -19,7 +19,7 @@
         </form>
       </div>
     </div>
-    
+
     <!-- Display Sections -->
     <div class="card mt-4 mb-4">
       <div class="card-header bg-info text-white">
@@ -63,7 +63,8 @@
           </div>
           <div class="mb-3">
             <label for="editDescription" class="form-label">Description</label>
-            <textarea v-model="editingSection.description" class="form-control" id="editDescription" rows="1" required></textarea>
+            <textarea v-model="editingSection.description" class="form-control" id="editDescription" rows="1"
+              required></textarea>
           </div>
           <button type="submit" class="btn btn-success">Update Section</button>
         </form>
@@ -122,7 +123,7 @@ export default {
           // alert response message
           alert(this.editingSection.name + ' updated successfully !!')
         });
-        
+
         this.editingSection = null;
         this.getAllSections();
       } catch (error) {
@@ -137,6 +138,7 @@ export default {
         console.error('Delete Section failed:', error);
       }
     }
+
   }
 };
 </script>

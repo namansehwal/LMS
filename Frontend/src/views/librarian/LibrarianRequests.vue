@@ -59,7 +59,8 @@ export default {
     },
     async acceptRequest(requestId) {
       try {
-        await this.$axios.put(`/book/request`, { id: requestId, approved: 'True' })
+        const response = await this.$axios.put(`/book/request`, { id: requestId, approved: 'True' })
+        alert(response.data.message)
         this.getAllRequests()
       } catch (error) {
         console.error('Accept Request failed:', error)
@@ -67,9 +68,12 @@ export default {
     },
     async rejectRequest(requestId) {
       try {
-        await this.$axios
-          .put(`/book/request`, { id: requestId, approved: 'False' })
-          .this.getAllRequests()
+        const response = await this.$axios.put(`/book/request`, {
+          id: requestId,
+          approved: 'False'
+        })
+        alert(response.data.message)
+        this.getAllRequests()
       } catch (error) {
         console.error('Reject Request failed:', error)
       }

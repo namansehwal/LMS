@@ -5,7 +5,7 @@
       <div class="card-header">Access Logs</div>
       <div class="card-body">
         <!-- Filter by Action -->
-        <div class="mb-3">
+        <div class="mb-2">
           <label for="actionFilter" class="form-label">Filter by Action:</label>
           <select v-model="actionFilter" class="form-select" id="actionFilter">
             <option value="">All</option>
@@ -21,11 +21,10 @@
               <th>ID</th>
               <th>User ID</th>
               <th>Book ID</th>
-              <th>Action</th>
-              <th>Log Date</th>
               <th>Status</th>
               <th>Issue Date</th>
               <th>Return Date</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -33,12 +32,13 @@
               <td>{{ log.id }}</td>
               <td>{{ log.user_id }}</td>
               <td>{{ log.book_id }}</td>
-              <td>{{ log.action }}</td>
-              <td>{{ log.log_date }}</td>
               <td>{{ log.status }}</td>
               <td>{{ formatDateTime(log.issue_date) }}</td>
               <td v-if="log.return_date">{{ formatDateTime(log.return_date) }}</td>
               <td v-else>N/A</td>
+              <td>
+                <button class="btn btn-danger btn-sm" @click="revokeAccesss(log.id)">Revoke</button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -62,7 +62,7 @@ export default {
     filteredLogs() {
       // Filter logs based on selected action
       return this.actionFilter
-        ? this.logs.filter((log) => log.action === this.actionFilter)
+        ? this.logs.filter((log) => log.status === this.actionFilter)
         : this.logs
     }
   },
@@ -73,6 +73,14 @@ export default {
         this.logs = response.data
       } catch (error) {
         console.error('Get Access Logs failed:', error)
+      }
+    },
+    async revokeAccesss(id) {
+      try {
+        await this.$axios.put(`/book/access`, { id: id, returned: 'True' })
+        this.getAllAccessLogs()
+      } catch (error) {
+        console.error('Revoke Access failed:', error)
       }
     },
     formatDateTime(dateTimeString) {
