@@ -182,11 +182,10 @@ export default {
           section_id: this.editingBook.section_id
         }).then(() => {
           // alert response message
-          alert(this.editingBook.name + ' updated successfully')
+          alert(this.editingBook.name + ' updated successfully !!')
         });
 
         this.editingBook = null;
-        
         this.getAllBooks();
       } catch (error) {
         console.error('Update Book failed:', error);

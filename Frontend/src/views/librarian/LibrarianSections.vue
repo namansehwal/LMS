@@ -118,6 +118,9 @@ export default {
           id: this.editingSection.id,
           name: this.editingSection.name,
           description: this.editingSection.description
+        }).then(() => {
+          // alert response message
+          alert(this.editingSection.name + ' updated successfully !!')
         });
         
         this.editingSection = null;

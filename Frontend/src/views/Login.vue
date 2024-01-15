@@ -207,11 +207,11 @@ body {
 }
 
 .login-form {
-  background-color: #db6334;
+  background-color: #deb461;
 }
 
 .register-form {
-  background-color: #e73ca0; /* Default color, can be overridden dynamically */
+  background-color: #72ade9; /* Default color, can be overridden dynamically */
 }
 
 .card-body {
