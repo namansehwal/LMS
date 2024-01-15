@@ -68,7 +68,12 @@
         // Add your logic for requesting to issue a book
         try {
           // You might want to send a request to the server to handle the book issuance request
-          console.log(`Request to issue book with ID ${bookId}`);
+          // make a POST request to /book/request with the book ID and user ID
+          const response = await this.$axios.post('/book/request', {
+            book_id: bookId,
+            user_id: localStorage.getItem('user_id'),
+          });
+          alert(response.data.message);
         } catch (error) {
           console.error('Request to Issue failed:', error);
         }

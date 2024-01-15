@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from datetime import datetime
+from datetime import datetime, timedelta
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -90,7 +90,8 @@ class Request(db.Model):
     def __serialize__(self):
         return {
             "id": self.id,
-            "user_id": self.user_id,
+            # user_id with name
+            "user_id": self.user_id + ' ' + self.user.username,
             "book_id": self.book_id,
             "request_date": self.request_date,
             "status": self.status,
@@ -104,12 +105,44 @@ class Rating(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
     rating_value = db.Column(db.Integer, nullable=False)
-    comment = db.Column(db.Text)
     date_rated = db.Column(db.DateTime)
+
+    def __init__(self, user_id, book_id, rating_value):
+        self.user_id = user_id
+        self.book_id = book_id
+        self.rating_value = rating_value
+        self.date_rated = datetime.now()
+
+    def __serialize__(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "book_id": self.book_id,
+            "rating_value": self.rating_value,
+            "date_rated": self.date_rated
+        }    
 
 class AccessLog(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
-    action = db.Column(db.String(10), nullable=False)  # Issue/Return
-    log_date = db.Column(db.DateTime, nullable=False)
+    status = db.Column(db.String(10), nullable=False)  # Issued / Returned 
+    issue_date = db.Column(db.DateTime, nullable=False)
+    return_date = db.Column(db.DateTime, nullable=False)
+
+    def __init__(self, user_id, book_id):
+        self.user_id = user_id
+        self.book_id = book_id
+        self.status = 'Issued'
+        self.issue_date = datetime.now()
+        self.return_date = datetime.now() + timedelta(days=7)
+
+    def __serialize__(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "book_id": self.book_id,
+            "status": self.status,
+            "issue_date": self.issue_date,
+            "return_date": self.return_date
+        }    

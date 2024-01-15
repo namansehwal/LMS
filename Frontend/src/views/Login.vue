@@ -103,6 +103,7 @@ export default {
       localStorage.setItem('email', data.email);
       localStorage.setItem('username', data.username);
       localStorage.setItem('role', data.role);
+      localStorage.setItem('user_id', data.user_id);
     },
     redirectBasedOnRole(role) {
       // Redirect based on user role

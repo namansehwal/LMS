@@ -48,6 +48,7 @@ def login_user():
                         "role": user.user_type,
                         "username": user.username,
                         "email": user.email,   
+                        'user_id': user.id,
                         }), 200
 
 @jwt_required()

@@ -22,6 +22,9 @@ if __name__ == '__main__':
         # Create Librarian as Admin if not exists
         from utils.librarian_setup import librarian_setup
         librarian_setup()   
-
+        
+        # check if book is returned
+        from utils.check_return import update_access_logs
+        update_access_logs()
 
     app.run(debug=True)    

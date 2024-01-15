@@ -1,7 +1,7 @@
 from api.auth import register_user, login_user, user_details
 from api.section import sectionAPI
 from api.book import bookAPI
-from api.bookoperation import book_request
+from api.bookoperation import book_request, BookAccess, BookRating
 
 from app import app
 
@@ -20,4 +20,7 @@ app.add_url_rule("/section", view_func=sectionAPI, methods=["GET", "POST", "PUT"
 # Book Operation Routes
 app.add_url_rule("/book", view_func=bookAPI, methods=["GET", "POST", "PUT", "DELETE"])
 app.add_url_rule("/book/request", view_func=book_request, methods=["GET", "POST", "PUT"])
+app.add_url_rule("/book/access", view_func=BookAccess, methods=["GET", "PUT"])
+app.add_url_rule("/book/rating", view_func=BookRating, methods=["GET", "POST"])
+
 
