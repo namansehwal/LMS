@@ -91,7 +91,7 @@ class Request(db.Model):
         return {
             "id": self.id,
             # user_id with name
-            "user_id": self.user_id + ' ' + self.user.username,
+            "user_id": self.user_id ,
             "book_id": self.book_id,
             "request_date": self.request_date,
             "status": self.status,
