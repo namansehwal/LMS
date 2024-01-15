@@ -10,7 +10,11 @@ def book_request():
         books_query = Request.query.all()
         books = []
         for book in books_query:
+            book.user_id =  User.query.get(book.user_id).username 
+            book.book_id =   Book.query.get(book.book_id).name
+                        
             books.append(book.__serialize__())
+           
         return jsonify(books), 200
     
     if request.method == 'POST':
@@ -69,16 +73,6 @@ def book_request():
 
 def BookAccess():
     if request.method == 'GET':
-
-        data = request.get_json()
-        if data.get('user_id'):
-            books_query = AccessLog.query.filter_by(user_id=data.get('user_id')).all()
-            books = []
-            for book in books_query:
-                books.append(book.__serialize__())
-                # add book name and user name to the response
-                
-            return jsonify(books), 200
         
         books_query = AccessLog.query.all()
         books = []

@@ -2,16 +2,14 @@
   <div class="container mt-5">
     <!-- Display Requests -->
     <div class="card mt-4">
-      <div class="card-header bg-info text-white">
-        All Requests
-      </div>
+      <div class="card-header bg-info text-white">All Requests</div>
       <div class="card-body">
         <table class="table">
           <thead>
             <tr>
               <th>ID</th>
-              <th>User ID</th>
-              <th>Book ID</th>
+              <th>User</th>
+              <th>Book</th>
               <th>Request Date</th>
               <th>Status</th>
               <th>Actions</th>
@@ -25,7 +23,12 @@
               <td>{{ formatRequestDate(request.request_date) }}</td>
               <td>{{ request.status }}</td>
               <td>
-                <button @click="cancelRequest(request.id)" class="btn btn-danger btn-sm">Cancel</button>
+                <button @click="acceptRequest(request.id)" class="btn btn-success btn-sm m-1">
+                  Accept
+                </button>
+                <button @click="rejectRequest(request.id)" class="btn btn-danger btn-sm m-1">
+                  Reject
+                </button>
               </td>
             </tr>
           </tbody>
@@ -40,32 +43,49 @@ export default {
   data() {
     return {
       requests: []
-    };
+    }
   },
   mounted() {
-    this.getAllRequests();
+    this.getAllRequests()
   },
   methods: {
     async getAllRequests() {
       try {
-        const response = await this.$axios.get('/book/request');
-        this.requests = response.data;
+        const response = await this.$axios.get('/book/request')
+        this.requests = response.data
       } catch (error) {
-        console.error('Get Requests failed:', error);
+        console.error('Get Requests failed:', error)
+      }
+    },
+    async acceptRequest(requestId) {
+      try {
+        await this.$axios.put(`/book/request`, { id: requestId, approved: 'True' })
+        this.getAllRequests()
+      } catch (error) {
+        console.error('Accept Request failed:', error)
+      }
+    },
+    async rejectRequest(requestId) {
+      try {
+        await this.$axios
+          .put(`/book/request`, { id: requestId, approved: 'False' })
+          .this.getAllRequests()
+      } catch (error) {
+        console.error('Reject Request failed:', error)
       }
     },
     async cancelRequest(requestId) {
       try {
-        await this.$axios.delete(`/request/${requestId}`);
-        this.getAllRequests();
+        await this.$axios.delete(`/request/${requestId}`)
+        this.getAllRequests()
       } catch (error) {
-        console.error('Cancel Request failed:', error);
+        console.error('Cancel Request failed:', error)
       }
     },
     formatRequestDate(dateString) {
-      const options = { year: 'numeric', month: 'short', day: 'numeric' };
-      return new Date(dateString).toLocaleDateString('en-US', options);
+      const options = { year: 'numeric', month: 'short', day: 'numeric' }
+      return new Date(dateString).toLocaleDateString('en-US', options)
     }
   }
-};
+}
 </script>
