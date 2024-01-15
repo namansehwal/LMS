@@ -27,8 +27,10 @@
             </div>
           </div>
           <div class="mb-3">
-            <label for="sectionId" class="form-label">Section ID</label>
-            <input v-model="newBook.section_id" type="number" class="form-control" id="sectionId" required>
+            <label for="sectionId" class="form-label">Section</label>
+            <select v-model="newBook.section_id" class="form-control" id="sectionId" required>
+              <option v-for="section in sections" :key="section.id" :value="section.id">{{ section.name }}</option>
+            </select>
           </div>
           <button type="submit" class="btn btn-primary">Add Book</button>
         </form>
@@ -67,7 +69,7 @@
               <td>{{ book.section_id }}</td>
               <td>
                 <button @click="editBook(book)" class="btn btn-warning btn-sm mr-2">Edit</button>
-                <button @click="deleteBook(book.id)" class="btn btn-danger btn-sm">Delete</button>
+                <button @click="deleteBook(book.id)" class="btn btn-danger btn-sm mt-2">Delete</button>
               </td>
             </tr>
           </tbody>
@@ -101,8 +103,10 @@
             </div>
           </div>
           <div class="mb-3">
-            <label for="editSectionId" class="form-label">Section ID</label>
-            <input v-model="editingBook.section_id" type="number" class="form-control" id="editSectionId" required>
+            <label for="editSectionId" class="form-label">Section</label>
+            <select v-model="editingBook.section_id" class="form-control" id="editSectionId" required>
+              <option v-for="section in sections" :key="section.id" :value="section.id">{{ section.name }}</option>
+            </select>
           </div>
           <button type="submit" class="btn btn-success">Update Book</button>
         </form>
@@ -123,11 +127,13 @@ export default {
         section_id: ''
       },
       books: [],
-      editingBook: null
+      editingBook: null,
+      sections: []
     };
   },
   mounted() {
     this.getAllBooks();
+    this.getAllSections();
   },
   methods: {
     async addBook() {
@@ -154,6 +160,14 @@ export default {
         console.error('Get Books failed:', error);
       }
     },
+    async getAllSections() {
+      try {
+        const response = await this.$axios.get('/section');
+        this.sections = response.data;
+      } catch (error) {
+        console.error('Get Sections failed:', error);
+      }
+    },
     editBook(book) {
       this.editingBook = { ...book };
     },
@@ -166,9 +180,13 @@ export default {
           isbn: this.editingBook.isbn,
           author: this.editingBook.author,
           section_id: this.editingBook.section_id
+        }).then(() => {
+          // alert response message
+          alert(this.editingBook.name + ' updated successfully')
         });
 
         this.editingBook = null;
+        
         this.getAllBooks();
       } catch (error) {
         console.error('Update Book failed:', error);
@@ -189,43 +207,43 @@ export default {
 <style scoped>
 /* Center the card in the middle of the page */
 .container {
-display: flex;
-justify-content: center;
-align-items: left;
-min-height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  min-height: 50vh;
 }
 
 /* Add some spacing to the buttons for better readability */
 .btn {
-margin-right: 5px;
+  margin-right: 5px;
 }
 
 /* Make the card header text bold */
 .card-header {
-font-weight: bold;
+  font-weight: bold;
 }
 
 /* Custom styles for the form headers */
 .card-header.bg-primary,
 .card-header.bg-info,
 .card-header.bg-success {
-text-align: center;
-font-size: 1.2rem;
+  text-align: center;
+  font-size: 1.2rem;
 }
 
 /* Style table header */
 .table thead th {
-background-color: #343a40;
-color: white;
+  background-color: #343a40;
+  color: white;
 }
 
 /* Style alternating rows in the table */
 .table-striped tbody tr:nth-child(odd) {
-background-color: #f8f9fa;
+  background-color: #f8f9fa;
 }
 
 /* Hover effect for table rows */
 .table-hover tbody tr:hover {
-background-color: #e2e6ea;
+  background-color: #e2e6ea;
 }
 </style>

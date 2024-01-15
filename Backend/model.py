@@ -79,6 +79,25 @@ class Request(db.Model):
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
     request_date = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(20), nullable=False)  # Pending/Approved
+    approved_date = db.Column(db.DateTime)
+
+    def __init__(self, user_id, book_id):
+        self.user_id = user_id
+        self.book_id = book_id
+        self.request_date = datetime.now()
+        self.status = 'Pending'
+
+    def __serialize__(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "book_id": self.book_id,
+            "request_date": self.request_date,
+            "status": self.status,
+            "approved_date": self.approved_date
+        }
+
+        
 
 class Rating(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

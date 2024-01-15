@@ -16,7 +16,7 @@
         </div>
 
         <!-- Logout Button -->
-        <button @click="logout" class="btn btn-outline-danger ml-auto">Logout</button>
+        <button @click="logout" class="btn btn-danger ml-auto">Logout</button>
 
         <!-- Mobile Menu Button -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"

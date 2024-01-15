@@ -11,6 +11,8 @@ import LibrarianAccessLogs from '../views/librarian/LibrarianAccessLogs.vue'
 import UserDashboard from '../views/user/UserDashboard.vue'
 import UserSections from '../views/user/UserSections.vue'
 import UserBooks from '../views/user/UserBooks.vue'
+import UserProfile from '../views/user/UserProfile.vue'
+import UserSpace from '../views/user/UserSpace.vue'
 import UserRequests from '../views/user/UserRequests.vue'
 
 const routes = [
@@ -97,6 +99,16 @@ const routes = [
         path: 'requests',
         name: 'UserRequests',
         component: UserRequests
+      },
+      {
+        path: 'profile',
+        name: 'UserProfile',
+        component: UserProfile
+      },
+      {
+        path: 'space',
+        name: 'UserSpace',
+        component: UserSpace
       }
     ]
   },
