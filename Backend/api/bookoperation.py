@@ -46,15 +46,15 @@ def book_request():
         if book:
             if data.get('approved') == "True":
                 setattr(book, 'status', 'Approved')
-                setattr(book, 'approved_date', str(datetime.now()))
+                setattr(book, 'approved_date', datetime.now())
                 db.session.commit()
-                return jsonify({"message": "Book request approved"}), 200
+                return jsonify({"message": "Successfully, Book request approved"}), 200
             
             elif data.get('approved') == "False":
                 setattr(book, 'status', 'Rejected')
                 db.session.commit()
-                return jsonify({"message": "Book request rejected"}), 200
+                return jsonify({"message": "Successfully, book request rejected"}), 200
         else:
-                return jsonify({"message": "Book request not found!!"}), 400
+                return jsonify({"message": "Error, Book request not found!!"}), 400
     
   
