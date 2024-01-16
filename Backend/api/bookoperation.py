@@ -21,30 +21,78 @@ def book_request():
         data = request.get_json()
         required_keys = ["user_id", "book_id"]
 
-        # check user_id and book_id exists in database
-        user_id = User.query.get(data.get("user_id"))
-        book_id = Book.query.get(data.get("book_id"))
-        if not user_id:
+        # check user_id and book_id exist in the database
+        user = User.query.get(data.get("user_id"))
+        book = Book.query.get(data.get("book_id"))
+
+        if not user:
             return jsonify({"error": "User not found"}), 404
-        if not book_id:
+        if not book:
             return jsonify({"error": "Book not found"}), 404
 
         missing_keys = [key for key in required_keys if key not in data]
 
         if missing_keys:
             return (
-                jsonify(
-                    {"error": f"Missing required keys : {', '.join(missing_keys)}"}
-                ),
+                jsonify({"error": f"Missing required keys: {', '.join(missing_keys)}"}),
                 400,
             )
 
-        new_book = BookRequest(
+        # check if user has already requested the book
+        existing_request = BookRequest.query.filter_by(
+            user_id=data["user_id"], book_id=data["book_id"], status="Pending"
+        ).first()
+
+        if existing_request:
+            return (
+                jsonify(
+                    {"message": "Book request already exists!! \nPending for Approval"}
+                ),
+                200,
+            )
+
+        # check if user has already issued the book
+        existing_access_log = AccessLog.query.filter_by(
+            user_id=data["user_id"], book_id=data["book_id"], status="Issued"
+        ).first()
+
+        if existing_access_log:
+            return (
+                jsonify(
+                    {"message": "Book already issued!! \nNo need to raise a request."}
+                ),
+                200,
+            )
+
+        # logic to check count of books borrowed/requested by user is less than 5
+        issued_count = AccessLog.query.filter_by(
+            user_id=data["user_id"], status="Issued"
+        ).count()
+        pending_count = BookRequest.query.filter_by(
+            user_id=data["user_id"], status="Pending"
+        ).count()
+
+        total_count = issued_count + pending_count
+
+        if total_count >= 5:
+            return (
+                jsonify(
+                    {
+                        "message": """Maximum limit reached of 5 at a time!! To raise a new request:
+                            \n1. You can return some books. \n2. Take back book issuance request."""
+                    }
+                ),
+                200,
+            )
+
+        # create new book request
+        new_book_request = BookRequest(
             user_id=data["user_id"],
             book_id=data["book_id"],
         )
-        db.session.add(new_book)
+        db.session.add(new_book_request)
         db.session.commit()
+
         return (
             jsonify(
                 {
