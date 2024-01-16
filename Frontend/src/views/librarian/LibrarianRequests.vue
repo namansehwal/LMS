@@ -4,6 +4,7 @@
     <div class="card mt-4">
       <div class="card-header bg-info text-white">All Requests</div>
       <div class="card-body">
+        <!-- Table for Pending Requests -->
         <table class="table">
           <thead>
             <tr>
@@ -16,10 +17,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="request in requests" :key="request.id">
+            <tr v-for="request in pendingRequests" :key="request.id">
               <td>{{ request.id }}</td>
-              <td>{{ request.user_id }}</td>
-              <td>{{ request.book_id }}</td>
+              <td>{{ request.username }}</td>
+              <td>{{ request.book_name }}</td>
               <td>{{ formatRequestDate(request.request_date) }}</td>
               <td>{{ request.status }}</td>
               <td>
@@ -35,6 +36,34 @@
         </table>
       </div>
     </div>
+
+    <!-- Display Approved/Rejected Requests (Request Logs) -->
+    <div class="card mt-4">
+      <div class="card-header bg-success text-white">Request Logs</div>
+      <div class="card-body">
+        <!-- Table for Approved/Rejected Requests -->
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>User</th>
+              <th>Book</th>
+              <th>Request Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="request in approvedRejectedRequests" :key="request.id">
+              <td>{{ request.id }}</td>
+              <td>{{ request.username }}</td>
+              <td>{{ request.book_name }}</td>
+              <td>{{ formatRequestDate(request.request_date) }}</td>
+              <td>{{ request.status }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -42,54 +71,62 @@
 export default {
   data() {
     return {
-      requests: []
-    }
+      requests: [],
+    };
+  },
+  computed: {
+    pendingRequests() {
+      return this.requests.filter(request => request.status === 'Pending');
+    },
+    approvedRejectedRequests() {
+      return this.requests.filter(request => request.status === 'Approved' || request.status === 'Rejected');
+    },
   },
   mounted() {
-    this.getAllRequests()
+    this.getAllRequests();
   },
   methods: {
     async getAllRequests() {
       try {
-        const response = await this.$axios.get('/book/request')
-        this.requests = response.data
+        const response = await this.$axios.get('/book/request');
+        this.requests = response.data;
       } catch (error) {
-        console.error('Get Requests failed:', error)
+        console.error('Get Requests failed:', error);
       }
     },
     async acceptRequest(requestId) {
       try {
-        const response = await this.$axios.put(`/book/request`, { id: requestId, approved: 'True' })
-        alert(response.data.message)
-        this.getAllRequests()
+        const response = await this.$axios.put(`/book/request`, { id: requestId, approved: 'True' });
+        alert(response.data.message);
+        this.getAllRequests();
       } catch (error) {
-        console.error('Accept Request failed:', error)
+        console.error('Accept Request failed:', error);
       }
     },
     async rejectRequest(requestId) {
       try {
         const response = await this.$axios.put(`/book/request`, {
           id: requestId,
-          approved: 'False'
-        })
-        alert(response.data.message)
-        this.getAllRequests()
+          approved: 'False',
+        });
+        alert(response.data.message);
+        this.getAllRequests();
       } catch (error) {
-        console.error('Reject Request failed:', error)
+        console.error('Reject Request failed:', error);
       }
     },
     async cancelRequest(requestId) {
       try {
-        await this.$axios.delete(`/request/${requestId}`)
-        this.getAllRequests()
+        await this.$axios.delete(`/request/${requestId}`);
+        this.getAllRequests();
       } catch (error) {
-        console.error('Cancel Request failed:', error)
+        console.error('Cancel Request failed:', error);
       }
     },
     formatRequestDate(dateString) {
-      const options = { year: 'numeric', month: 'short', day: 'numeric' }
-      return new Date(dateString).toLocaleDateString('en-US', options)
-    }
-  }
-}
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString('en-US', options);
+    },
+  },
+};
 </script>

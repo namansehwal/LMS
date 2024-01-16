@@ -10,9 +10,6 @@ def book_request():
         books_query = BookRequest.query.all()
         books = []
         for book in books_query:
-            book.user_id = User.query.get(book.user_id).username
-            book.book_id = Book.query.get(book.book_id).name
-
             books.append(book.__serialize__())
 
         return jsonify(books), 200
@@ -124,6 +121,17 @@ def book_request():
                 return jsonify({"message": "Successfully, book request rejected"}), 200
         else:
             return jsonify({"message": "Error, Book request not found!!"}), 400
+        
+    if request.method == "DELETE":
+        data = request.get_json()
+        book = BookRequest.query.get(data.get("id"))
+
+        if book:
+            db.session.delete(book)
+            db.session.commit()
+            return jsonify({"message": "Successfully, Book request deleted"}), 200
+        else:
+            return jsonify({"message": "Error, Book request not found!!"}), 400    
 
 
 def BookAccess():

@@ -7,7 +7,7 @@ from flask_jwt_extended import (
 )
 from flask_jwt_extended.exceptions import JWTDecodeError
 from model import db, bcrypt, User 
-
+from datetime import datetime
 
 def register_user():
     if request.method == 'POST':
@@ -43,6 +43,8 @@ def login_user():
 
         access_token = create_access_token(identity=user.id)
         
+        user.last_login = datetime.now()
+        db.session.commit()
 
         return jsonify({"access_token": access_token,
                         "role": user.user_type,
