@@ -12,6 +12,7 @@ class User(db.Model):
     email = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(50), nullable=False)
     user_type = db.Column(db.String(20), nullable=False)
+    last_login = db.Column(db.DateTime)
 
     def __init__(self, username, email, password, user_type="user"):
         self.username = username
@@ -78,8 +79,10 @@ class Book(db.Model):
 
 class BookRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    book_id = db.Column(db.Integer, db.ForeignKey("book.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    book_id = db.Column(db.Integer, db.ForeignKey("book.id"))
+    username = db.Column(db.String(50))
+    book_name = db.Column(db.String(100))
     request_date = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(20), nullable=False)  # Pending/Approved
     approved_date = db.Column(db.DateTime)
@@ -87,15 +90,18 @@ class BookRequest(db.Model):
     def __init__(self, user_id, book_id):
         self.user_id = user_id
         self.book_id = book_id
+        self.username = User.query.get(user_id).username
+        self.book_name = Book.query.get(book_id).name
         self.request_date = datetime.now()
         self.status = "Pending"
 
     def __serialize__(self):
         return {
             "id": self.id,
-            # user_id with name
             "user_id": self.user_id,
             "book_id": self.book_id,
+            "username": self.username,
+            "book_name": self.book_name,
             "request_date": self.request_date,
             "status": self.status,
             "approved_date": self.approved_date,
@@ -127,8 +133,10 @@ class Rating(db.Model):
 
 class AccessLog(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    book_id = db.Column(db.Integer, db.ForeignKey("book.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    username = db.Column(db.String(50))
+    book_id = db.Column(db.Integer, db.ForeignKey("book.id"))
+    book_name = db.Column(db.String(100))
     status = db.Column(db.String(10), nullable=False)  # Issued / Returned
     issue_date = db.Column(db.DateTime, nullable=False)
     return_date = db.Column(db.DateTime, nullable=False)
@@ -137,6 +145,8 @@ class AccessLog(db.Model):
         self.user_id = user_id
         self.book_id = book_id
         self.status = "Issued"
+        self.username = User.query.get(user_id).username
+        self.book_name = Book.query.get(book_id).name
         self.issue_date = datetime.now()
         self.return_date = datetime.now() + timedelta(days=7)
 
@@ -145,6 +155,8 @@ class AccessLog(db.Model):
             "id": self.id,
             "user_id": self.user_id,
             "book_id": self.book_id,
+            "username": self.username,
+            "book_name": self.book_name,
             "status": self.status,
             "issue_date": self.issue_date,
             "return_date": self.return_date,
