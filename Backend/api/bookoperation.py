@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from model import db, BookRequest, User, Book, AccessLog, Rating
 from flask_jwt_extended import jwt_required
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 # @jwt_required()
@@ -149,14 +149,26 @@ def BookAccess():
 
         if book:
             if data.get("returned") == "True":
-                setattr(book, "status", "Returned")
-                setattr(book, "return_date", datetime.now())
-                db.session.commit()
-                return jsonify({"message": "Successfully, Book returned"}), 200
+                # Check if returned on or before the due date
+                if datetime.now() <= book.due_date:
+                    book.status = "Returned"
+                    book.due_date = datetime.now() + timedelta(days=7)
+                    db.session.commit()
+                    return jsonify({"message": "Successfully, Book returned"}), 200
+                else:
+                    return jsonify({"message": "Error, Book overdue, cannot be returned"}), 400
+            else:
+                # Check if due date has passed
+                if datetime.now() > book.due_date:
+                    book.status = "Revoked"
+                    db.session.commit()
+                    return jsonify({"message": "Sorry, u have no more access..."}), 200
+                else:
+                    return jsonify({"message": "Error, Book due date has not passed, cannot be revoked"}), 400
         else:
             return jsonify({"message": "Error, Book Access log not found!!"}), 400
-
-
+        
+        
 def BookRating():
     if request.method == "GET":
         books_query = Rating.query.all()
