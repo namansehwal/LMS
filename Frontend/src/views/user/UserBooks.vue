@@ -16,7 +16,6 @@
                 <h6 class="card-title book-title"><b>{{ book.name }}</b></h6>
                 <p class="card-text book-info"><strong>Author:</strong> {{ book.author }}</p>
                 <p class="card-text book-info"><strong>ISBN:</strong> {{ book.isbn }}</p>
-                <p class="card-text book-info"><strong>Pages: </strong> {{ book.number_of_pages }}</p>
                 <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to Issue</button>
               </div>
             </div>

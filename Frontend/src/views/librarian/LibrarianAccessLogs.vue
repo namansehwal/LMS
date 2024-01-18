@@ -11,8 +11,6 @@
             <option value="">All</option>
             <option value="Issued">Issued</option>
             <option value="Returned">Returned</option>
-            <option value="Revoked">Revoked</option>
-            
           </select>
         </div>
 
@@ -25,8 +23,7 @@
               <th>Book ID</th>
               <th>Status</th>
               <th>Issue Date</th>
-              <th>Due Date</th>
-              <th v-if="actionFilter === 'Revoked' ">Revoke Date</th>
+              <th>Return Date</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -37,11 +34,10 @@
               <td>{{ log.book_id }}</td>
               <td>{{ log.status }}</td>
               <td>{{ formatDateTime(log.issue_date) }}</td>
-              <td>{{ formatDateTime(log.due_date) }}</td>
-              <td v-if="log.status === 'Revoked'" style="color: rgb(151, 9, 9);">{{ "Revoked on " + formatDateTime(log.revoke_date) }}</td>
-              <td v-else-if="actionFilter === 'Revoked'">N/A</td>
+              <td v-if="log.return_date">{{ formatDateTime(log.return_date) }}</td>
+              <td v-else>N/A</td>
               <td>
-                <button v-if="log.status === 'Issued'" class="btn btn-danger btn-sm" @click="revokeAccesss(log.id)" :disabled="log.status === 'Revoked'  || (actionFilter === 'Revoked' && log.due_date > new Date())">Revoke</button>
+                <button class="btn btn-danger btn-sm" @click="revokeAccesss(log.id)">Revoke</button>
               </td>
             </tr>
           </tbody>
@@ -81,7 +77,7 @@ export default {
     },
     async revokeAccesss(id) {
       try {
-        await this.$axios.put(`/book/access`, { id: id, returned: 'False' })
+        await this.$axios.put(`/book/access`, { id: id, returned: 'True' })
         this.getAllAccessLogs()
       } catch (error) {
         console.error('Revoke Access failed:', error)

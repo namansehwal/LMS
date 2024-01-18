@@ -12,7 +12,6 @@
               <th>Request Date</th>
               <th>Status</th>
               <th>Action</th>
-
             </tr>
           </thead>
           <tbody>
