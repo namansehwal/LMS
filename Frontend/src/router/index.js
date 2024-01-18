@@ -12,7 +12,6 @@ import UserDashboard from '../views/user/UserDashboard.vue'
 import UserBooks from '../views/user/UserBooks.vue'
 import UserProfile from '../views/user/UserProfile.vue'
 import UserSpace from '../views/user/UserSpace.vue'
-import UserRequests from '../views/user/UserRequests.vue'
 
 const routes = [
   {
@@ -88,11 +87,6 @@ const routes = [
         path: 'books',
         name: 'UserBooks',
         component: UserBooks
-      },
-      {
-        path: 'requests',
-        name: 'UserRequests',
-        component: UserRequests
       },
       {
         path: 'profile',

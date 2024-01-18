@@ -1,88 +1,119 @@
 <template>
-    <div class="container mt-2">
-      <!-- Display Books -->
-      <div class="row">
-        <div class="col-lg-12 mb-1">
-          <h2 class="text-center mb-6"><b><i><u>Explore Your Library...</u></i></b></h2>
+  <div class="container mt-2">
+    <!-- Display Books -->
+    <div class="row">
+      <div class="col-lg-12 mb-1">
+        <h2 class="text-center mb-6"><b><i><u>Explore Your Library...</u></i></b></h2>
+      </div>
+
+      <div v-for="section in filteredSections" :key="section.id" class="col-lg-12 mb-4">
+        <div class="section-heading mb-1">
+          <h3>{{ section.name }}</h3>
         </div>
-  
-        <div v-for="section in sections" :key="section.id" class="col-lg-12 mb-4">
-          <div class="section-heading mb-1">
-            <h3>{{ section.name }}</h3>
-          </div>
-          <div class="card-deck">
-            <div v-for="book in getBooksBySection(section.id)" :key="book.id" class="card">
-              <div class="card-body">
-                <h6 class="card-title book-title"><b>{{ book.name }}</b></h6>
-                <p class="card-text book-info"><strong>Author:</strong> {{ book.author }}</p>
-                <p class="card-text book-info"><strong>ISBN:</strong> {{ book.isbn }}</p>
-                <p class="card-text book-info"><strong>Pages:</strong> {{ book.number_of_pages }}</p>
-                <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to Issue</button>
-              </div>
+        <div class="card-deck">
+          <div v-for="book in filteredBooksBySection(section.id)" :key="book.id" class="card">
+            <div class="card-body">
+              <h6 class="card-title book-title"><b>{{ book.name }}</b></h6>
+              <p class="card-text book-info"><strong>Author:</strong> {{ book.author }}</p>
+              <p class="card-text book-info"><strong>ISBN:</strong> {{ book.isbn }}</p>
+              <p class="card-text book-info"><strong>Pages:</strong> {{ book.number_of_pages }}</p>
+              <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to Issue</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        books: [],
-        sections: [],
-      };
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      books: [],
+      sections: [],
+      searchTerm: "",
+    };
+  },
+  watch: {
+    $route(to, from) {
+      // Update the searchTerm when the route changes
+      this.searchTerm = to.query.search || "";
     },
-    mounted() {
-      this.getAllBooks();
-      this.getAllSections();
+    searchTerm(newVal, oldVal) {
+      // Update the route query when the searchTerm changes
+      this.$router.replace({ query: { search: newVal } });
     },
-    computed: {
-      uniqueCategories() {
-        const categories = new Set(this.books.map((book) => book.category));
-        return Array.from(categories);
-      },
+  },
+  computed: {
+    filteredBooks() {
+      // Filter books based on the search term
+      const searchTermLowerCase = this.searchTerm.toLowerCase();
+      return this.books.filter((book) => {
+        const lowerCaseName = book.name.toLowerCase();
+        const lowerCaseAuthor = book.author.toLowerCase();
+
+        return (
+          lowerCaseName.includes(searchTermLowerCase) ||
+          lowerCaseAuthor.includes(searchTermLowerCase) ||
+          this.sections.find((section) => section.id === book.section_id).name.toLowerCase().includes(searchTermLowerCase)
+        );
+      });
     },
-    methods: {
-      async getAllBooks() {
-        try {
-          const response = await this.$axios.get('/book');
-          this.books = response.data;
-        } catch (error) {
-          console.error('Get Books failed:', error);
-        }
-      },
-      async getAllSections() {
-        try {
-          const response = await this.$axios.get('/section');
-          this.sections = response.data;
-        } catch (error) {
-          console.error('Get Sections failed:', error);
-        }
-      },
-      getBooksBySection(sectionId) {
-        // Filter books by section
-        return this.books.filter((book) => book.section_id === sectionId);
-      },
-      async requestToIssue(bookId) {
-        // Add your logic for requesting to issue a book
-        try {
-          // You might want to send a request to the server to handle the book issuance request
-          // make a POST request to /book/request with the book ID and user ID
-          const response = await this.$axios.post('/book/request', {
-            book_id: bookId,
-            user_id: localStorage.getItem('user_id'),
-          });
-          alert(response.data.message);
-        } catch (error) {
-          console.error('Request to Issue failed:', error);
-        }
-      },
+    filteredSections() {
+      // Filter sections based on the search term
+      const searchTermLowerCase = this.searchTerm.toLowerCase();
+      return this.sections.filter((section) => section.name.toLowerCase().includes(searchTermLowerCase));
     },
-  };
-  </script>
-  
+  },
+  methods: {
+    async getAllBooks() {
+      try {
+        const response = await this.$axios.get('/book');
+        this.books = response.data;
+      } catch (error) {
+        console.error('Get Books failed:', error);
+      }
+    },
+    async getAllSections() {
+      try {
+        const response = await this.$axios.get('/section');
+        this.sections = response.data;
+      } catch (error) {
+        console.error('Get Sections failed:', error);
+      }
+    },
+    getBooksBySection(sectionId) {
+      // Filter books by section
+      return this.books.filter((book) => book.section_id === sectionId);
+    },
+    filteredBooksBySection(sectionId) {
+      // Filter books by section based on the search term
+      return this.filteredBooks.filter((book) => book.section_id === sectionId);
+    },
+    async requestToIssue(bookId) {
+      // Add your logic for requesting to issue a book
+      try {
+        // You might want to send a request to the server to handle the book issuance request
+        // make a POST request to /book/request with the book ID and user ID
+        const response = await this.$axios.post('/book/request', {
+          book_id: bookId,
+          user_id: localStorage.getItem('user_id'),
+        });
+        alert(response.data.message);
+      } catch (error) {
+        console.error('Request to Issue failed:', error);
+      }
+    },
+  },
+  mounted() {
+    this.getAllBooks();
+    this.getAllSections();
+  },
+};
+</script>
+
+
   <style scoped>
   /* Styles for section heading */
   .section-heading {
