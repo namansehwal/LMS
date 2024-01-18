@@ -3,7 +3,7 @@ from model import db, User, AccessLog, Rating, BookRequest
 
 def UserProfile():
    # this function is used to get the user profile and update the user profile only Username and Email
-    if request.method == "GET":
+    if request.method == "POST":
         data = request.get_json()
         user = User.query.get(data.get("id"))
         if not user:
@@ -12,7 +12,7 @@ def UserProfile():
             "id": user.id,
             "username": user.username,
             "email": user.email,
-            "created_at": user.created_at
+            "last_login": user.last_login
         }
         return jsonify(result), 200
         

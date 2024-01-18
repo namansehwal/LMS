@@ -11,7 +11,7 @@ from app import app
 app.add_url_rule("/register", view_func=register_user, methods=["POST"])
 app.add_url_rule("/login", view_func=login_user, methods=["POST"])
 app.add_url_rule("/user", view_func=user_details, methods=["GET"])
-app.route("/profile", view_func= UserProfile,methods=["GET", "PUT","DELETE"])
+app.add_url_rule("/profile", view_func= UserProfile,methods=["POST", "PUT","DELETE"])
 
 
 # Section Routes

@@ -77,6 +77,7 @@ export default {
         // Redirect to the dashboard or another page
         this.redirectBasedOnRole(response.data.role);
       } catch (error) {
+        alert(error.response.data.message)
         console.error('Login failed:', error);
       }
     },
