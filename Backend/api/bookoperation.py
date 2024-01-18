@@ -2,7 +2,7 @@ from flask import request, jsonify
 from model import db, BookRequest, User, Book, AccessLog, Rating
 from flask_jwt_extended import jwt_required
 from datetime import datetime
-
+from flask.views import MethodView
 
 # @jwt_required()
 def book_request():
@@ -152,31 +152,29 @@ def BookAccess():
                 setattr(book, "status", "Returned")
                 setattr(book, "return_date", datetime.now())
                 db.session.commit()
-                return jsonify({"message": "Successfully, Book returned"}), 200
+                return jsonify({"message": "Book returned successfully!!"}), 200
         else:
             return jsonify({"message": "Error, Book Access log not found!!"}), 400
 
 
-def BookRating():
-    if request.method == "GET":
-        books_query = Rating.query.all()
-        books = []
-        for book in books_query:
-            books.append(book.__serialize__())
-        return jsonify(books), 200
+class BookRating(MethodView):
+    def get(self, book_id):
+        # Get and return ratings for the specified book_id
+        ratings_query = Rating.query.filter_by(book_id=book_id).all()
+        ratings = [rating.__serialize__() for rating in ratings_query]
+        return jsonify({"book_id": book_id, "ratings": ratings}), 200
 
-    if request.method == "POST":
-        #    def __init__(self, user_id, book_id, rating_value):
+    def post(self, book_id):
         data = request.get_json()
-        required_keys = ["user_id", "book_id", "rating_value"]
+        required_keys = ["user_id", "rating_value"]
 
-        # check user_id and book_id exists in database
-        user_id = User.query.get(data.get("user_id"))
-        book_id = Book.query.get(data.get("book_id"))
+        # check user_id and book_id exist in the database
+        user = User.query.get(data.get("user_id"))
+        book = Book.query.get(book_id)
 
-        if not user_id:
+        if not user:
             return jsonify({"error": "User not found"}), 404
-        if not book_id:
+        if not book:
             return jsonify({"error": "Book not found"}), 404
 
         missing_keys = [key for key in required_keys if key not in data]
@@ -184,28 +182,34 @@ def BookRating():
         if missing_keys:
             return (
                 jsonify(
-                    {"error": f"Missing required keys : {', '.join(missing_keys)}"}
+                    {"error": f"Missing required keys: {', '.join(missing_keys)}"}
                 ),
                 400,
             )
 
-        # check if user has already rated the book
-        rating = Rating.query.filter_by(
-            user_id=data.get("user_id"), book_id=data.get("book_id")
-        ).first()
+        # Check if the user has either issued or returned the book
+        access_log = AccessLog.query.filter_by(user_id=user.id, book_id=book.id).first()
+
+        if not access_log:
+            return jsonify({"error": "You can only rate a book you have issued or returned"}), 400
+
+        # Validate rating_value (assuming it should be between 1 and 5)
+        rating_value = data.get("rating_value")
+        if not (1 <= rating_value <= 5):
+            return jsonify({"error": "Invalid rating_value. It should be between 1 and 5"}), 400
+
+        # Check if the user has already rated the book
+        rating = Rating.query.filter_by(user_id=user.id, book_id=book.id).first()
 
         if rating:
-            # update rating
-            setattr(rating, "rating_value", data.get("rating_value"))
+            # Update existing rating
+            rating.rating_value = rating_value
             db.session.commit()
-            return jsonify({"message": "Successfully, Book rating updated"}), 200
+            return jsonify({"message": "Book rating updated successfully"}), 200
 
-        new_book = Rating(
-            user_id=data["user_id"],
-            book_id=data["book_id"],
-            rating_value=data["rating_value"],
-        )
-        db.session.add(new_book)
+        new_rating = Rating(user_id=user.id, book_id=book.id, rating_value=rating_value)
+        db.session.add(new_rating)
         db.session.commit()
 
         return jsonify({"message": "Book rating created successfully"}), 201
+

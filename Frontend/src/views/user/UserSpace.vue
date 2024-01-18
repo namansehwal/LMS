@@ -44,6 +44,7 @@
               <th>Status</th>
               <th>Issue Date</th>
               <th>Return Date</th>
+              <th>Rating</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -54,6 +55,18 @@
               <td>{{ accessLog.status }}</td>
               <td>{{ accessLog.issue_date }}</td>
               <td>{{ accessLog.return_date }}</td>
+              <tr><td>
+                <select v-model="accessLog.rating" v-if="accessLog.status === 'Issued'">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </td>
+              <td>
+                <button class="btn btn-primary" v-if="accessLog.status === 'Issued'" @click="submitRating(accessLog)">Submit Rating</button>
+              </td></tr>
               <td>
                 <button class="btn btn-danger" v-if="accessLog.status === 'Issued'" @click="returnBook(accessLog.id)">Return</button>
               </td>
@@ -111,49 +124,76 @@
             console.error('Error fetching issued books', error);
           });
       },
+      submitRating(accessLog) {
+        if (!accessLog.rating) {
+          alert('Please select a rating before submitting.');
+          return;
+        }
+
+        // Send the rating to the server
+        this.$axios({
+          method: 'post',
+          url: `/book/rating/${accessLog.book_id}`,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: {
+            user_id: accessLog.user_id,
+            book_id: accessLog.book_id,
+            rating_value: parseInt(accessLog.rating),
+          },
+        })
+          .then(() => {
+            alert('Rating submitted successfully');
+            // Optionally, you can update the UI or fetch updated data
+            this.fetchIssuedBooks();
+          })
+          .catch((error) => {
+            console.error('Error submitting rating', error);
+          });
+      },
 
       deleteRequest(requestId) {
-  this.$axios({
-    method: 'delete',
-    url: `/book/request`,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: {
-      id: requestId,
-    },
-  })
-  .then(response => {
-    alert(response.data.message);
-    this.fetchBookRequests();
-  })
-  .catch(error => {
-    console.error('Error deleting request', error);
-  });
-},
+        this.$axios({
+          method: 'delete',
+          url: `/book/request`,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: {
+            id: requestId,
+          },
+        })
+        .then(response => {
+          alert(response.data.message);
+          this.fetchBookRequests();
+        })
+        .catch(error => {
+          console.error('Error deleting request', error);
+        });
+      },
 
-returnBook(accessLogId) {
-  this.$axios({
-    method: 'put',
-    url: `/book/access`,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: {
-      id: accessLogId,
-      returned: "True",
-    },
-  })
-  .then(() => {
-    // Refresh the issued books
-    alert('Book returned successfully');
-    this.fetchIssuedBooks();
-  })
-  .catch(error => {
-    console.error('Error returning book', error);
-  });
-},
-
+      returnBook(accessLogId) {
+        this.$axios({
+          method: 'put',
+          url: `/book/access`,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: {
+            id: accessLogId,
+            returned: "True",
+          },
+        })
+        .then(() => {
+          // Refresh the issued books
+          alert('Book returned successfully');
+          this.fetchIssuedBooks();
+        })
+        .catch(error => {
+          console.error('Error returning book', error);
+        });
+      },
     },
   };
   </script>

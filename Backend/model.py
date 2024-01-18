@@ -75,8 +75,7 @@ class Book(db.Model):
             "section_id": self.section_id,
             "number_of_pages": self.number_of_pages,
         }
-
-
+    
 class BookRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
@@ -127,7 +126,7 @@ class Rating(db.Model):
             "user_id": self.user_id,
             "book_id": self.book_id,
             "rating_value": self.rating_value,
-            "date_rated": self.date_rated,
+            "date_rated": self.date_rated.strftime('%Y-%m-%d %H:%M:%S'),
         }
 
 

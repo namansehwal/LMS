@@ -17,6 +17,19 @@
               <p class="card-text book-info"><strong>Author:</strong> {{ book.author }}</p>
               <p class="card-text book-info"><strong>ISBN:</strong> {{ book.isbn }}</p>
               <p class="card-text book-info"><strong>Pages:</strong> {{ book.number_of_pages }}</p>
+              <div v-if="book.averageRating !== undefined" class="star-rating-container">
+                <p class="card-text book-info"><strong>Rating:</strong></p>
+                <div class="star-rating">
+                  <!-- <span v-if="book.averageRating === 0">&#9734;</span> -->
+                  <span v-for="star in 5" :class="{ filled: star <= book.averageRating }">&#9733;</span>
+                </div>
+              </div>
+              <div v-else class="star-rating-container">
+              <p class="card-text book-info"><strong>Rating:</strong></p>
+              <div class="star-rating">
+                  <span v-for="star in 5">&#9733;</span>
+              </div>
+          </div>
               <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to Issue</button>
             </div>
           </div>
@@ -71,6 +84,8 @@ export default {
       try {
         const response = await this.$axios.get('/book');
         this.books = response.data;
+        // Fetch ratings for each book
+        await this.fetchRatingsForBooks();
       } catch (error) {
         console.error('Get Books failed:', error);
       }
@@ -82,6 +97,36 @@ export default {
       } catch (error) {
         console.error('Get Sections failed:', error);
       }
+    },
+    async fetchRatingsForBooks() {
+      // Fetch ratings for each book
+      for (const book of this.books) {
+        try {
+          const response = await this.$axios.get(`/book/rating/${book.id}`);
+          const ratingsData = response.data;
+          
+          // Check if ratings property exists in the API response
+          if (Array.isArray(ratingsData.ratings)) {
+            const ratings = ratingsData.ratings;
+            console.log('Ratings for Book', book.id, ':', ratings);
+          
+            // Calculate average rating
+          if (ratings.length > 0) {
+            const averageRating = ratings.reduce((sum, rating) => sum + rating.rating_value, 0) / ratings.length;
+            console.log('Average Rating for Book', book.id, ':', averageRating);
+            
+            // Add averageRating property to the book object
+            book.averageRating = averageRating;
+          } else {
+            console.log('No Ratings for Book', book.id);
+          }
+        } else {
+          console.log('No Ratings for Book', book.id);
+        }
+      } catch (error) {
+        console.error(`Failed to fetch ratings for book ${book.id}:`, error);
+      }
+      }  
     },
     getBooksBySection(sectionId) {
       // Filter books by section
@@ -191,4 +236,21 @@ export default {
     background-color: #0056b3;
     border-color: #0056b3;
   }
+
+
+  .star-rating {
+    color: #9e9ca7; /* Golden yellow color for stars */
+  }
+
+  .filled {
+    color: #ff0008; /* Filled stars should also be golden yellow */
+  }
+
+
+  .star-rating-container {
+    margin-bottom: 10px; /* Adjust the margin as needed */
+    font-size: 15px;
+    display: flex;
+  }
+
 </style>
