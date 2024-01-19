@@ -32,23 +32,15 @@
     },
     methods: {
       fetchUserProfile() {
-        this.$axios({
-         method: 'post',
-         url: `profile`,
-         headers: {
-               'Content-Type': 'application/json',
-                     },
-         data: {
-                "id": this.userId,
-   
-            },}).then(response => {
-            const userData = response.data;
-            this.username = userData.username;
-            this.email = userData.email;
-          })
-          .catch(error => {
-            console.error("Error fetching user profile:", error);
-          });
+        this.$axios.get(`/profile/${this.userId}`)
+            .then(response => {
+                const userData = response.data;
+                this.username = userData.username;
+                this.email = userData.email;
+            })
+            .catch(error => {
+                console.error("Error fetching user profile:", error);
+            });
       },
       updateProfile() {
         const data = {
@@ -57,7 +49,7 @@
           email: this.email,
         };
   
-        this.$axios.put('/profile', data)
+        this.$axios.put(`/profile/${this.userId}`, data)
           .then(response => {
             alert(response.data.message);
           })
@@ -72,14 +64,14 @@
         };
   
         if (window.confirm("Are you sure you want to delete your profile?")) {
-          this.$axios.delete('/profile', { data })
+          this.$axios.delete(`/profile/${this.userId}`, { data })
             .then(response => {
               console.log(response.data.message);
 
               // Optionally, redirect the user to a login page or another route
               alert(response.data.message);
-              localStorage.clear();
               this.$router.push('/login');
+              localStorage.clear();
 
             })
             .catch(error => {

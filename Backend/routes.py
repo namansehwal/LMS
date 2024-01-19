@@ -11,8 +11,7 @@ from app import app
 app.add_url_rule("/register", view_func=register_user, methods=["POST"])
 app.add_url_rule("/login", view_func=login_user, methods=["POST"])
 app.add_url_rule("/user", view_func=user_details, methods=["GET"])
-app.add_url_rule("/profile", view_func= UserProfile,methods=["POST", "PUT","DELETE"])
-
+app.add_url_rule("/profile/<int:user_id>", view_func=UserProfile, methods=["GET", "PUT", "DELETE"])
 
 # Section Routes
 app.add_url_rule("/section", view_func=sectionAPI, methods=["GET", "POST", "PUT", "DELETE"])
