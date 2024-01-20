@@ -155,6 +155,11 @@ def BookAccess():
                 setattr(book, "return_date", datetime.now())
                 db.session.commit()
                 return jsonify({"message": "Book returned successfully!!"}), 200
+            elif data.get("revoke") == "True":
+                setattr(book, "status", "Revoked")
+                setattr(book, "revoke_date", datetime.now())
+                db.session.commit()
+                return jsonify({"message": "Book revoked successfully!!"}), 200
         else:
             return jsonify({"message": "Error, Book Access log not found!!"}), 400
 

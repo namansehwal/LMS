@@ -78,7 +78,7 @@ export default {
     },
     async revokeAccesss(id) {
       try {
-        await this.$axios.put(`/book/access`, { id: id, returned: 'True' })
+        await this.$axios.put(`/book/access`, { id: id, revoke: 'True' })
         this.getAllAccessLogs()
       } catch (error) {
         console.error('Revoke Access failed:', error)
