@@ -41,8 +41,8 @@
               <td>{{ section.name }}</td>
               <td>{{ section.description }}</td>
               <td>
-                <button @click="editSection(section)" class="btn btn-warning btn-sm">Edit</button>
-                <button @click="deleteSection(section.id)" class="btn btn-danger btn-sm">Delete</button>
+                <button @click="editSection(section)" class="btn btn-warning btn-sm m-1">Edit</button>
+                <button @click="deleteSection(section.id)" class="btn btn-danger btn-sm m-1">Delete</button>
               </td>
             </tr>
           </tbody>

@@ -2,11 +2,11 @@
   <div class="container mt-5">
     <!-- Display Requests -->
     <div class="card mt-4">
-      <div class="card-header bg-info text-white">All Requests</div>
+      <div class="card-header">All Requests</div>
       <div class="card-body">
         <!-- Table for Pending Requests -->
-        <table class="table">
-          <thead>
+        <table class="table table-bordered table-hover">
+          <thead class="thead">
             <tr>
               <th>ID</th>
               <th>User</th>
@@ -24,7 +24,7 @@
               <td>{{ formatRequestDate(request.request_date) }}</td>
               <td>{{ request.status }}</td>
               <td>
-                <button @click="acceptRequest(request.id)" class="btn btn-success btn-sm m-1">
+                <button @click="acceptRequest(request.id)" class="btn btn-warning btn-sm m-1">
                   Accept
                 </button>
                 <button @click="rejectRequest(request.id)" class="btn btn-danger btn-sm m-1">
@@ -39,11 +39,11 @@
 
     <!-- Display Approved/Rejected Requests (Request Logs) -->
     <div class="card mt-4">
-      <div class="card-header bg-success text-white">Request Logs</div>
+      <div class="card-header">Request Logs</div>
       <div class="card-body">
         <!-- Table for Approved/Rejected Requests -->
-        <table class="table">
-          <thead>
+        <table class="table table-bordered table-hover">
+          <thead class="thead">
             <tr>
               <th>ID</th>
               <th>User</th>
@@ -130,3 +130,64 @@ export default {
   },
 };
 </script>
+
+
+<style>
+.card-header{
+  background-color: #8eeca7;
+  font-weight: bold;
+  color: rgb(148, 18, 102);
+  text-align: center;
+  width: 100%;
+}
+
+.table {
+    width: 90%;
+    margin-bottom: 1rem;
+    color: #e0e085;
+    border-collapse: collapse;
+    margin: 0 auto;
+  }
+  
+  .table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #25977c;
+    border-top: 2px solid #25977c;
+    border-left: 2px solid #25977c;
+    border-right: 2px solid #25977c;
+    border-style: double;
+    background-color: #c6d466;
+    color: rgb(11, 111, 19);
+    text-align: center;
+  }
+  
+  .table-bordered {
+    border: 2px solid #25977c;
+  }
+  
+  .table-bordered th,
+  .table-bordered td {
+    border: 2px solid #25977c;
+    border-style: dashed;
+  }
+
+  .table th{
+    text-align: center;
+  }
+
+  .table td{
+    text-align: center;
+  }
+
+.btn {
+  cursor: pointer;
+  transition: opacity 0.3s ease-in-out;
+  border-radius: 10px;
+  padding: 6px 16px;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+</style>

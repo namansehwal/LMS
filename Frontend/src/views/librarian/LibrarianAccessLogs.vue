@@ -16,8 +16,8 @@
         </div>
 
         <!-- Display Access Logs Table -->
-        <table class="table">
-          <thead>
+        <table class="table table-bordered">
+          <thead class="bg-secondary text-white">
             <tr>
               <th>ID</th>
               <th>User ID</th>
@@ -108,25 +108,67 @@ export default {
 
 .card {
   margin-top: 20px;
-  border: 1px solid #ddd;
+  border: 3px solid #ad9191;
   border-radius: 5px;
+  overflow:hidden;
 }
 
 .card-header {
-  background-color: #007bff;
-  color: white;
+  background-color: #75aeba;
   font-weight: bold;
+  color: rgb(21, 8, 84);
+  text-align: center;
+  width: 100%;
 }
 
 .form-label {
   font-weight: bold;
+  color: rgb(183, 45, 162);
 }
 
 .form-select {
   width: 200px;
 }
 
-.table {
-  margin-top: 20px;
+.table thead th{
+  vertical-align: bottom;
+  border-bottom: 2px solid #b0bc2b;
+  border-top: 2px solid #b0bc2b;
+  border-left: 2px solid #b0bc2b;
+  border-right: 2px solid #b0bc2b;
+  border-style: double;
 }
+  
+.table td {
+  background-color: #a0dbd5;
+  color: rgb(27, 8, 84);
+  text-align: center;
+  margin: auto;
+  padding: auto;
+}
+
+.table th {
+  background-color: #5abe85;
+  color: rgb(178, 23, 139);
+  text-align: center;
+  padding: auto;
+}
+
+.table-bordered td {
+    border: 2px solid #ba96ab;
+    border-style: dashed;
+}
+
+.btn-danger {
+  background-color: #b57d7f;
+  border-color: #5500ff;
+  color: #6f1318;
+  font-weight: bold;
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-left: auto;
+}
+
 </style>
