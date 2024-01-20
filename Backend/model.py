@@ -113,8 +113,9 @@ class Rating(db.Model):
     book_id = db.Column(db.Integer, db.ForeignKey("book.id"), nullable=False)
     rating_value = db.Column(db.Integer, nullable=False)
     date_rated = db.Column(db.DateTime)
+    avg_rating = db.Column(db.Float)
 
-    def __init__(self, user_id, book_id, rating_value):
+    def __init__(self, user_id, book_id, rating_value, avg_rating=None):
         self.user_id = user_id
         self.book_id = book_id
         self.rating_value = rating_value
@@ -127,6 +128,7 @@ class Rating(db.Model):
             "book_id": self.book_id,
             "rating_value": self.rating_value,
             "date_rated": self.date_rated.strftime('%Y-%m-%d %H:%M:%S'),
+            "avg_rating": self.avg_rating,
         }
 
 

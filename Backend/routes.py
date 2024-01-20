@@ -3,6 +3,7 @@ from api.section import sectionAPI
 from api.book import bookAPI
 from api.bookoperation import book_request, BookAccess, BookRating
 from api.profile import UserProfile
+from api.summary import SummaryAPI
 
 from app import app
 
@@ -25,3 +26,5 @@ app.add_url_rule("/book/access", view_func=BookAccess, methods=["GET", "PUT"])
 # app.add_url_rule("/book/rating", view_func=BookRating, methods=["GET", "POST"])
 app.add_url_rule("/book/rating/<int:book_id>", view_func=BookRating.as_view("book_rating"))
 
+#Summary Route
+app.add_url_rule("/summary", view_func=SummaryAPI.as_view("summary"), methods=["GET"])

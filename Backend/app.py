@@ -7,8 +7,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 app.config.from_object(Config)
 from routes import *
-bcrypt.init_app(app)
-jwt = JWTManager(app)
+bcrypt.init_app(app)  #password hashing
+jwt = JWTManager(app)  #JSON Web Tokens
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 

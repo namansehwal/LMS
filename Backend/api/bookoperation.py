@@ -3,6 +3,8 @@ from model import db, BookRequest, User, Book, AccessLog, Rating
 from flask_jwt_extended import jwt_required
 from datetime import datetime
 from flask.views import MethodView
+from sqlalchemy import func
+
 
 # @jwt_required()
 def book_request():
@@ -206,9 +208,20 @@ class BookRating(MethodView):
             rating.rating_value = rating_value
             db.session.commit()
             return jsonify({"message": "Book rating updated successfully"}), 200
+        else:
+            new_rating = Rating(user_id=user.id, book_id=book.id, rating_value=rating_value)
+            db.session.add(new_rating)
+            db.session.commit()
 
-        new_rating = Rating(user_id=user.id, book_id=book.id, rating_value=rating_value)
-        db.session.add(new_rating)
+        # Calculate average rating for the book using SQLAlchemy's func.avg
+        avg_rating = (
+            db.session.query(func.avg(Rating.rating_value))
+            .filter_by(book_id=book.id)
+            .scalar()
+        )
+
+        # Update avg_rating in the Book table
+        book.avg_rating = avg_rating
         db.session.commit()
 
         return jsonify({"message": "Book rating created successfully"}), 201
