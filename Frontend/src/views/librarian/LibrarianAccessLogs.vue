@@ -24,7 +24,7 @@
               <th>Book ID</th>
               <th>Status</th>
               <th>Issue Date</th>
-              <th>Return Date</th>
+              <th>Due Date</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -35,7 +35,7 @@
               <td>{{ log.book_id }}</td>
               <td>{{ log.status }}</td>
               <td>{{ formatDateTime(log.issue_date) }}</td>
-              <td v-if="log.return_date">{{ formatDateTime(log.return_date) }}</td>
+              <td v-if="log.due_date">{{ formatDateTime(log.due_date) }}</td>
               <td v-else>N/A</td>
               <td>
                 <button v-if="log.status === 'Issued'" class="btn btn-danger btn-sm" @click="revokeAccesss(log.id)">Revoke</button>

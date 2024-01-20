@@ -29,7 +29,7 @@ class SummaryAPI(Resource):
             total_ratings = Rating.query.count()
 
             # Calculate total overdue books
-            overdue_books = AccessLog.query.filter(AccessLog.status == "Issued", AccessLog.return_date < datetime.now()).count()
+            overdue_books = AccessLog.query.filter(AccessLog.status == "Issued", AccessLog.due_date < datetime.now()).count()
 
             #total penalty
             total_penalty = int(round(overdue_books * 25))

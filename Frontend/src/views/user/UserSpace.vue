@@ -43,7 +43,6 @@
               <th>Book Name</th>
               <th>Status</th>
               <th>Issue Date</th>
-              <th>Return Date</th>
               <th>Rating</th>
               <th>Action</th>
             </tr>
@@ -54,7 +53,6 @@
               <td>{{ accessLog.book_name }}</td>
               <td>{{ accessLog.status }}</td>
               <td>{{ accessLog.issue_date }}</td>
-              <td>{{ accessLog.return_date }}</td>
               <tr><td>
                 <select v-model="accessLog.rating" v-if="accessLog.status === 'Issued'">
                   <option value="1">1</option>

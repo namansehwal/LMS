@@ -138,9 +138,9 @@ class AccessLog(db.Model):
     username = db.Column(db.String(50))
     book_id = db.Column(db.Integer, db.ForeignKey("book.id"))
     book_name = db.Column(db.String(100))
-    status = db.Column(db.String(10), nullable=False)  # Issued / Returned
+    status = db.Column(db.String(10), nullable=False)  # Issued / Returned / Revoked
     issue_date = db.Column(db.DateTime, nullable=False)
-    return_date = db.Column(db.DateTime, nullable=False)
+    due_date = db.Column(db.DateTime, nullable=False)
 
     def __init__(self, user_id, book_id):
         self.user_id = user_id
@@ -149,7 +149,7 @@ class AccessLog(db.Model):
         self.username = User.query.get(user_id).username
         self.book_name = Book.query.get(book_id).name
         self.issue_date = datetime.now()
-        self.return_date = datetime.now() + timedelta(days=7)
+        self.due_date = datetime.now() + timedelta(days=7)
 
     def __serialize__(self):
         return {
@@ -160,5 +160,5 @@ class AccessLog(db.Model):
             "book_name": self.book_name,
             "status": self.status,
             "issue_date": self.issue_date,
-            "return_date": self.return_date,
+            "due_date": self.due_date,
         }
