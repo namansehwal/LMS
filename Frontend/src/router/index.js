@@ -6,6 +6,7 @@ import LibrarianSections from '../views/librarian/LibrarianSections.vue'
 import LibrarianBooks from '../views/librarian/LibrarianBooks.vue'
 import LibrarianRequests from '../views/librarian/LibrarianRequests.vue'
 import LibrarianAccessLogs from '../views/librarian/LibrarianAccessLogs.vue'
+import Stats_and_Graphs from '../views/librarian/Stats_and_Graphs.vue'
 
 
 import UserDashboard from '../views/user/UserDashboard.vue'
@@ -61,6 +62,11 @@ const routes = [
         path: 'accesslogs',
         name: 'LibrarianAccessLogs',
         component: LibrarianAccessLogs
+      },
+      {
+        path: 'stats_and_graphs',
+        name: 'Stats_and_Graphs',
+        component: Stats_and_Graphs
       }
     ]
   },

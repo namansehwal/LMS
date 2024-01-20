@@ -24,7 +24,7 @@ app.add_url_rule("/book", view_func=bookAPI, methods=["GET", "POST", "PUT", "DEL
 app.add_url_rule("/book/request", view_func=book_request, methods=["GET", "POST", "PUT", "DELETE"])
 app.add_url_rule("/book/access", view_func=BookAccess, methods=["GET", "PUT"])
 # app.add_url_rule("/book/rating", view_func=BookRating, methods=["GET", "POST"])
-app.add_url_rule("/book/rating/<int:book_id>", view_func=BookRating.as_view("book_rating"))
+app.add_url_rule("/book/rating/<int:book_id>", view_func=BookRating.as_view("book_rating"), methods=["GET", "POST"])
 
 #Summary Route
 app.add_url_rule("/summary", view_func=SummaryAPI.as_view("summary"), methods=["GET"])
