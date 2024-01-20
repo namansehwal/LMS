@@ -11,6 +11,7 @@
             <option value="">All</option>
             <option value="Issued">Issued</option>
             <option value="Returned">Returned</option>
+            <option value="Revoked">Revoked</option>
           </select>
         </div>
 
