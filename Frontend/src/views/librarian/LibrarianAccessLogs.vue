@@ -37,7 +37,8 @@
               <td v-if="log.return_date">{{ formatDateTime(log.return_date) }}</td>
               <td v-else>N/A</td>
               <td>
-                <button class="btn btn-danger btn-sm" @click="revokeAccesss(log.id)">Revoke</button>
+                <button v-if="log.status === 'Issued'" class="btn btn-danger btn-sm" @click="revokeAccesss(log.id)">Revoke</button>
+                <button v-else class="btn btn-danger btn-sm" disabled>Revoke</button>
               </td>
             </tr>
           </tbody>
