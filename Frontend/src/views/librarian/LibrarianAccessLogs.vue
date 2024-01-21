@@ -132,15 +132,15 @@ export default {
 
 .table thead th{
   vertical-align: bottom;
-  border-bottom: 2px solid #b0bc2b;
-  border-top: 2px solid #b0bc2b;
-  border-left: 2px solid #b0bc2b;
-  border-right: 2px solid #b0bc2b;
+  border-bottom: 2px solid #7b2bbc;
+  border-top: 2px solid #7b2bbc;
+  border-left: 2px solid #7b2bbc;
+  border-right: 2px solid #7b2bbc;
   border-style: double;
 }
   
 .table td {
-  background-color: #a0dbd5;
+  /* background-color: #b3cdd5; */
   color: rgb(27, 8, 84);
   text-align: center;
   margin: auto;
@@ -148,8 +148,8 @@ export default {
 }
 
 .table th {
-  background-color: #5abe85;
-  color: rgb(178, 23, 139);
+  background-color: #ea9d77;
+  color: rgb(115, 73, 187);
   text-align: center;
   padding: auto;
 }
@@ -157,6 +157,13 @@ export default {
 .table-bordered td {
     border: 2px solid #ba96ab;
     border-style: dashed;
+}
+
+.table tbody {
+  border-bottom: 2px solid #7b2bbc;
+  border-top: 2px solid #7b2bbc;
+  border-left: 2px solid #7b2bbc;
+  border-right: 2px solid #7b2bbc;
 }
 
 .btn-danger {
