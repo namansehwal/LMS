@@ -230,7 +230,7 @@ body {
 }
 
 .submit-btn {
-  width: 25%;
+  width: 30%;
   margin-top: 10px;
   margin-left: 37.5%;
   transition: background-color 0.5s ease-in-out, border-color 0.5s ease-in-out;
