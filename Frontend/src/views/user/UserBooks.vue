@@ -1,9 +1,76 @@
 <template>
   <div class="container mt-2">
+
+    <!-- Recently Added Books -->
+    <div class="row">
+      <div class="col-lg-12 mb-1">
+        <h2 class="text-center mb-6"><b><i><u>Recently Added Books</u></i></b></h2>
+      </div>
+      
+      <div class="d-flex flex-wrap">
+        <div v-for="book in recentlyAddedBooks" :key="book.id" class="col-lg-12 mb-4">
+          <!-- Display recently added books as you did for Explore Library -->
+          <div class="card-body recent-book-card">
+            <h6 class="card-title book-title"><b>{{ book.name }}</b></h6>
+            <p class="card-text book-info"><strong>Author:</strong> {{ book.author }}</p>
+            <p class="card-text book-info"><strong>ISBN:</strong> {{ book.isbn }}</p>
+            <p class="card-text book-info"><strong>Pages:</strong> {{ book.number_of_pages }}</p>
+            <div v-if="book.averageRating !== undefined" class="star-rating-container">
+              <p class="card-text book-info"><strong>Rating:</strong></p>
+              <div class="star-rating">
+                <!-- <span v-if="book.averageRating === 0">&#9734;</span> -->
+                <span v-for="star in 5" :class="{ filled: star <= book.averageRating }">&#9733;</span>
+              </div>
+            </div>
+            <div v-else class="star-rating-container">
+            <p class="card-text book-info"><strong>Rating:</strong></p>
+            <div class="star-rating">
+                <span v-for="star in 5">&#9733;</span>
+            </div>
+            </div>
+            <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to Issue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top 5 Issued Books based on Rating -->
+    <div class="row">
+      <div class="col-lg-12 mb-1">
+        <h2 class="text-center mb-6"><b><i><u>Top 5 Issued Books (Based on Rating)</u></i></b></h2>
+      </div>
+
+      <div class="d-flex flex-wrap">
+        <div v-for="book in topRatedBooks" :key="book.id" class="col-lg-12 mb-4">
+          <!-- Display top-rated books as you did for Explore Library -->
+          <div class="card-body top-issued-book-card">
+            <h6 class="card-title book-title"><b>{{ book.name }}</b></h6>
+            <p class="card-text book-info"><strong>Author:</strong> {{ book.author }}</p>
+            <p class="card-text book-info"><strong>ISBN:</strong> {{ book.isbn }}</p>
+            <p class="card-text book-info"><strong>Pages:</strong> {{ book.number_of_pages }}</p>
+            <div v-if="book.averageRating !== undefined" class="star-rating-container">
+              <p class="card-text book-info"><strong>Rating:</strong></p>
+              <div class="star-rating">
+                <!-- <span v-if="book.averageRating === 0">&#9734;</span> -->
+                <span v-for="star in 5" :class="{ filled: star <= book.averageRating }">&#9733;</span>
+              </div>
+            </div>
+            <div v-else class="star-rating-container">
+            <p class="card-text book-info"><strong>Rating:</strong></p>
+            <div class="star-rating">
+                <span v-for="star in 5">&#9733;</span>
+            </div>
+            </div>
+            <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to Issue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Display Books -->
     <div class="row">
       <div class="col-lg-12 mb-1">
-        <h2 class="text-center mb-6"><b><i><u>Explore Your Library...</u></i></b></h2>
+        <h2 class="text-center mb-6"><b><i><u>Explore Library...</u></i></b></h2>
       </div>
 
       <div v-for="section in filteredSections" :key="section.id" class="col-lg-12 mb-4">
@@ -29,7 +96,7 @@
               <div class="star-rating">
                   <span v-for="star in 5">&#9733;</span>
               </div>
-          </div>
+              </div>
               <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to Issue</button>
             </div>
           </div>
@@ -59,6 +126,17 @@ export default {
     },
   },
   computed: {
+    recentlyAddedBooks() {
+      // Implement logic to get recently added books (e.g., sort by creation date)
+      const sortedBooks = this.books.slice().sort((a, b) => new Date(b.date_created) - new Date(a.date_created));
+      return sortedBooks.slice(0, 5); // Display the top 5 recently added books
+    },
+    topRatedBooks() {
+      // Implement logic to get top-rated books (e.g., sort by average rating)
+      const ratedBooks = this.books.filter((book) => book.averageRating !== undefined);
+      const sortedBooks = ratedBooks.slice().sort((a, b) => b.averageRating - a.averageRating);
+      return sortedBooks.slice(0, 5); // Display the top 5 rated books
+    },
     filteredBooks() {
       // Filter books based on the search term
       const searchTermLowerCase = this.searchTerm.toLowerCase();
@@ -252,5 +330,31 @@ export default {
     font-size: 15px;
     display: flex;
   }
+
+  .recent-book-card {
+  background: linear-gradient(45deg, #87CEEB, #4aa161); /* Gradient background */
+  border: 1px solid #553403; /* White border */
+  box-shadow: 0 2px 4px rgba(26, 183, 17, 0.1);
+  min-width: 100px;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+.top-issued-book-card {
+  background: linear-gradient(45deg, #b6a753, #a33f83); /* Gradient background */
+  border: 1px solid #760606; /* White border */
+  box-shadow: 0 2px 4px rgba(67, 3, 3, 0.1);
+  min-width: 100px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
 
 </style>
