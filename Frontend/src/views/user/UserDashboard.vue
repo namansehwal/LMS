@@ -6,8 +6,8 @@
         <!-- Logo and Name -->
         <router-link to="/user" class="navbar-brand" @click="toggleSidebar">
           <!-- Correct path to the image within the public folder -->
-          <img src="/logo.png" alt="Logo" class="logo-img">
-          LMS User Dashboard
+          <img src="/user.png" alt="user" class="img">
+          LMS (User)
         </router-link>
 
         <!-- Search Box -->
@@ -29,13 +29,13 @@
     <!-- Sidebar Menu -->
     <div v-if="sidebarVisible" class="sidebar">
       <div class="sidebar-header">
-        <router-link to="/user/books">Books</router-link>
+        <router-link to="/user/books"><img src="/user_books.jpg" alt="user_books" class="img">Books</router-link>
       </div>
       <div class="sidebar-header">
-        <router-link to="/user/profile">Profile</router-link>
+        <router-link to="/user/profile"><img src="/profile.jpg" alt="profile" class="img">Profile</router-link>
       </div>
       <div class="sidebar-header">
-        <router-link to="/user/space">My Library Space</router-link>
+        <router-link to="/user/space"><img src="/space.jpg" alt="space" class="img">My Library Space</router-link>
       </div>
     </div>
 
@@ -75,7 +75,7 @@ export default {
 
 <style scoped>
 /* Add your custom styles here */
-.logo-img {
+.img {
   max-width: 40px;
   margin-right: 10px;
 }
@@ -100,8 +100,9 @@ export default {
 }
 
 .sidebar-header {
-  text-align: center;
+  text-align: left;
   padding-bottom: 20px;
+  margin-left: 20px;
 }
 
 .main-content {

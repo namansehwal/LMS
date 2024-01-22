@@ -6,8 +6,8 @@
         <!-- Logo and Name -->
         <router-link to="/librarian" class="navbar-brand" @click="toggleSidebar">
           <!-- Correct path to the image within the public folder -->
-          <img src="/logo.png" alt="Logo" class="logo-img">
-          LMS
+          <img src="/admin.jpg" alt="admin" class="img">
+          LMS (Librarian)
         </router-link>
 
         <!-- Search Box -->
@@ -29,19 +29,19 @@
     <!-- Sidebar Menu -->
     <div v-if="sidebarVisible" class="sidebar">
         <div class="sidebar-header">
-            <router-link to="/librarian/sections">Sections</router-link>
+            <router-link to="/librarian/sections"><img src="/sections.jpg" alt="sections" class="img">Sections</router-link>
         </div>
         <div class="sidebar-header">
-            <router-link to="/librarian/books">Books</router-link>
+            <router-link to="/librarian/books"><img src="/lms_books.jpg" alt="lms_books" class="img">Books</router-link>
         </div>
         <div class="sidebar-header">
-            <router-link to="/librarian/accesslogs">Access Logs</router-link>
+            <router-link to="/librarian/accesslogs"><img src="/access.png" alt="access" class="img">Access Logs</router-link>
         </div>
         <div class="sidebar-header">
-            <router-link to="/librarian/requests">Requests</router-link>
+            <router-link to="/librarian/requests"><img src="/request.jpeg" alt="request" class="img">Requests</router-link>
         </div>
         <div class="sidebar-header">
-            <router-link to="/librarian/stats_and_graphs">Stats_and_Graphs</router-link>
+            <router-link to="/librarian/stats_and_graphs"><img src="/dashboard.jpg" alt="dashboard" class="img">Stats_and_Graphs</router-link>    
         </div>
     </div>
 
@@ -73,7 +73,7 @@ export default {
 
 <style scoped>
 /* Add your custom styles here */
-.logo-img {
+.img {
   max-width: 40px;
   margin-right: 10px;
 }
@@ -98,8 +98,9 @@ export default {
 }
 
 .sidebar-header {
-  text-align: center;
+  text-align: left;
   padding-bottom: 20px;
+  margin-left: 20px;
 }
 
 .main-content {

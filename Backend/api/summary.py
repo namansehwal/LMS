@@ -10,7 +10,8 @@ class SummaryAPI(Resource):
         try:
             result = {}
             # Calculate total users
-            total_users = User.query.count()
+            # total_users = User.query.count()
+            total_users = User.query.filter(User.id != 1, User.user_type != 'admin').count()
 
             # Calculate total books
             total_books = Book.query.count()
