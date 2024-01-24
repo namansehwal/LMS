@@ -8,11 +8,11 @@ import LibrarianRequests from '../views/librarian/LibrarianRequests.vue'
 import LibrarianAccessLogs from '../views/librarian/LibrarianAccessLogs.vue'
 import Stats_and_Graphs from '../views/librarian/Stats_and_Graphs.vue'
 
-
 import UserDashboard from '../views/user/UserDashboard.vue'
 import UserBooks from '../views/user/UserBooks.vue'
 import UserProfile from '../views/user/UserProfile.vue'
 import UserSpace from '../views/user/UserSpace.vue'
+import UserRead from '../views/user/UserRead.vue'
 
 const routes = [
   {
@@ -103,6 +103,11 @@ const routes = [
         path: 'space',
         name: 'UserSpace',
         component: UserSpace
+      },
+      {
+        path: 'read',
+        name: 'UserRead',
+        component: UserRead
       }
     ]
   },

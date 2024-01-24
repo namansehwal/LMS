@@ -37,6 +37,9 @@
       <div class="sidebar-header">
         <router-link to="/user/space"><img src="/space.jpg" alt="space" class="img">My Library Space</router-link>
       </div>
+      <div class="sidebar-header">
+        <router-link to="/user/read"><img src="/read.webp" alt="notifications" class="img">Read</router-link>
+      </div>  
     </div>
 
     <!-- Main Content -->
