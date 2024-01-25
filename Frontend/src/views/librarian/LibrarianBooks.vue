@@ -1,8 +1,8 @@
 <template>
-  <div class="container mt-5">
+  <div class="container mt-3">
 
     <!-- Add Book Form -->
-    <div class="card mt-4 mb-4">
+    <div class="card mt-4 mb-4" style="width: 30%;">
       <div class="card-header bg-primary text-white">
         Add Book
       </div>
@@ -31,19 +31,34 @@
             <input v-model="newBook.number_of_pages" type="number" class="form-control" id="number_of_pages" required>
           </div>
           <div class="mb-3">
+            <label for="image_url" class="form-label">Image</label>
+            <input v-model="newBook.image_url" type="text" class="form-control" id="image_url" required>
+          </div>
+          <div class="mb-3">
+            <label for="pdf_url" class="form-label">PDF</label>
+            <input v-model="newBook.pdf_url" type="text" class="form-control" id="pdf_url" required>
+          </div>
+          <div class="mb-3">
+            <label for="epub_url" class="form-label">EPUB</label>
+            <input v-model="newBook.epub_url" type="text" class="form-control" id="epub_url" required>
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input v-model="newBook.price" type="number" class="form-control" id="price" required>
+          </div>
+          <div class="mb-3">
             <label for="sectionId" class="form-label">Section</label>
             <select v-model="newBook.section_id" class="form-control" id="sectionId" required>
               <option v-for="section in sections" :key="section.id" :value="section.id">{{ section.name }}</option>
             </select>
           </div>
-
           <button type="submit" class="btn btn-primary">Add Book</button>
         </form>
       </div>
     </div>
 
     <!-- Display Books -->
-    <div class="card mt-4 mb-4">
+    <div class="card mt-4 mb-4" style="width: 50%;">
       <div class="card-header bg-info text-white">
         All Books
       </div>
@@ -59,6 +74,10 @@
               <th>Author</th>
               <th>Date Created</th>
               <th>Date Updated</th>
+              <th>Image</th>
+              <th>PDF</th>
+              <th>EPUB</th>
+              <th>Price</th>
               <th>Section ID</th>
               <th>Actions</th>
             </tr>
@@ -73,10 +92,14 @@
               <td>{{ book.author }}</td>
               <td>{{ book.date_created }}</td>
               <td>{{ book.date_updated }}</td>
+              <td>{{ book.image_url }}</td>
+              <td>{{ book.pdf_url }}</td>
+              <td>{{ book.epub_url }}</td>
+              <td>{{ book.price }}</td>
               <td>{{ book.section_id }}</td>
               <td>
-                <button @click="editBook(book)" class="btn btn-warning btn-sm mr-2">Edit</button>
-                <button @click="deleteBook(book.id)" class="btn btn-danger btn-sm mt-2">Delete</button>
+                <button @click="editBook(book)" class="btn btn-warning btn-sm m-1">Edit</button>
+                <button @click="deleteBook(book.id)" class="btn btn-danger btn-sm m-1">Delete</button>
               </td>
             </tr>
           </tbody>
@@ -113,7 +136,22 @@
             <label for="editnumber_of_pages" class="form-label">Number of Pages</label>
             <input v-model="editingBook.number_of_pages" type="number" class="form-control" id="number_of_pages" required>
           </div>
-
+          <div class="mb-3">
+            <label for="editimage_url" class="form-label">Image</label>
+            <input v-model="editingBook.image_url" type="text" class="form-control" id="image_url" required>
+          </div>
+          <div class="mb-3">
+            <label for="editpdf_url" class="form-label">PDF</label>
+            <input v-model="editingBook.pdf_url" type="text" class="form-control" id="image_url" required>
+          </div>
+          <div class="mb-3">
+            <label for="editepub_url" class="form-label">EPUB</label>
+            <input v-model="editingBook.epub_url" type="text" class="form-control" id="epub_url" required>
+          </div>
+          <div class="mb-3">
+            <label for="editprice" class="form-label">Price</label>
+            <input v-model="editingBook.price" type="number" class="form-control" id="price" required>
+          </div>
           <div class="mb-3">
             <label for="editSectionId" class="form-label">Section</label>
             <select v-model="editingBook.section_id" class="form-control" id="editSectionId" required>
@@ -137,7 +175,10 @@ export default {
         isbn: '',
         author: '',
         section_id: '',
-        number_of_pages: ''
+        number_of_pages: '',
+        image_url: '',
+        pdf_url: '',
+        epub_url: ''
       },
       books: [],
       editingBook: null,
@@ -160,7 +201,10 @@ export default {
           isbn: '',
           author: '',
           section_id: '',
-          number_of_pages: ''
+          number_of_pages: '',
+          image_url: '',
+          pdf_url: '',
+          epub_url: ''
         };
       } catch (error) {
         console.error('Add Book failed:', error);
@@ -195,6 +239,9 @@ export default {
           author: this.editingBook.author,
           section_id: this.editingBook.section_id,
           number_of_pages: this.editingBook.number_of_pages,
+          image_url: this.editingBook.image_url,
+          pdf_url: this.editingBook.pdf_url,
+          epub_url: this.editingBook.epub_url
         }).then(() => {
           // alert response message
           alert(this.editingBook.name + ' updated successfully !!')
@@ -219,12 +266,23 @@ export default {
 </script>
 
 <style scoped>
+.table tbody tr td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table tbody tr td:last-child {
+  white-space: nowrap;
+}
+
 /* Center the card in the middle of the page */
 .container {
   display: flex;
   justify-content: center;
   align-items: left;
   min-height: 50vh;
+  overflow: auto;
 }
 
 /* Add some spacing to the buttons for better readability */
@@ -235,6 +293,11 @@ export default {
 /* Make the card header text bold */
 .card-header {
   font-weight: bold;
+}
+
+.card-body {
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 /* Custom styles for the form headers */

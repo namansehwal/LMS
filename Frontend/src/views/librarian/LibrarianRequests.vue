@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5">
+  <div class="container mt-3">
     <!-- Display Requests -->
     <div class="card mt-4">
       <div class="card-header">All Requests</div>

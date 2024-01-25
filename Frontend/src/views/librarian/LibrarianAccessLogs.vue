@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5">
+  <div class="container mt-3">
     <!-- Display Access Logs and Filter -->
     <div class="card mt-4">
       <div class="card-header">Access Logs</div>

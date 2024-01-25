@@ -50,10 +50,14 @@ class Book(db.Model):
     author = db.Column(db.String(200), nullable=False)
     date_created = db.Column(db.DateTime)
     date_updated = db.Column(db.DateTime)
+    image_url = db.Column(db.String(255))
+    pdf_url = db.Column(db.String(255))
+    epub_url = db.Column(db.String(255))
+    price = db.Column(db.Float)
     section_id = db.Column(db.Integer, db.ForeignKey("section.id"), nullable=False)
     section = db.relationship("Section", backref=db.backref("books", lazy=True))
 
-    def __init__(self, name, content, isbn, author, section_id, number_of_pages):
+    def __init__(self, name, content, isbn, author, number_of_pages, image_url, pdf_url, epub_url, price, section_id):
         self.name = name
         self.content = content
         self.isbn = isbn
@@ -61,6 +65,10 @@ class Book(db.Model):
         self.number_of_pages = number_of_pages
         self.date_created = datetime.now()
         self.date_updated = datetime.now()
+        self.image_url = image_url
+        self.pdf_url = pdf_url
+        self.epub_url = epub_url
+        self.price = price
         self.section_id = section_id
 
     def __serialize__(self):
@@ -74,6 +82,10 @@ class Book(db.Model):
             "date_updated": self.date_updated,
             "section_id": self.section_id,
             "number_of_pages": self.number_of_pages,
+            "image_url": self.image_url,
+            "pdf_url": self.pdf_url,
+            "epub_url": self.epub_url,
+            "price": self.price,
         }
     
 class BookRequest(db.Model):

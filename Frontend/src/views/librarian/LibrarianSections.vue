@@ -1,7 +1,8 @@
 <template>
-  <div class="container mt-5">
+  <div class="container mt-3">
+
     <!-- Add Section Form -->
-    <div class="card mt-4 mb-4">
+    <div class="card mt-4 mb-4" style="width: 25%;">
       <div class="card-header bg-primary text-white">
         Add Section
       </div>
@@ -21,7 +22,7 @@
     </div>
 
     <!-- Display Sections -->
-    <div class="card mt-4 mb-4">
+    <div class="card mt-4 mb-4" style="width: 50%;">
       <div class="card-header bg-info text-white">
         All Sections
       </div>
@@ -144,12 +145,24 @@ export default {
 </script>
 
 <style scoped>
+.table tbody tr td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table tbody tr td:last-child {
+  white-space: nowrap;
+}
+
+
 /* Center the card in the middle of the page */
 .container {
   display: flex;
   justify-content: center;
   align-items: left;
   min-height: 50vh;
+  overflow: auto;
 }
 
 /* Add some spacing to the buttons for better readability */
@@ -160,6 +173,11 @@ export default {
 /* Make the card header text bold */
 .card-header {
   font-weight: bold;
+}
+
+.card-body {
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 /* Custom styles for the form headers */

@@ -22,6 +22,10 @@ def bookAPI():
             "author",
             "section_id",
             "number_of_pages",
+            "image_url",
+            "pdf_url",
+            "epub_url",
+            "price"
         ]
         missing_keys = [key for key in required_keys if key not in data]
 
@@ -39,7 +43,12 @@ def bookAPI():
             isbn=data["isbn"],
             author=data["author"],
             section_id=data["section_id"],
-            number_of_pages=data.get("number_of_pages"),
+            #number_of_pages=data.get("number_of_pages"),
+            number_of_pages=data["number_of_pages"],
+            image_url=data["image_url"],
+            pdf_url=data["pdf_url"],
+            epub_url=data["epub_url"],
+            price=data["price"]
         )
         db.session.add(new_book)
         db.session.commit()
@@ -57,6 +66,10 @@ def bookAPI():
                     "author",
                     "section_id",
                     "number_of_pages",
+                    "image_url",
+                    "pdf_url",
+                    "epub_url",
+                    "price"
                 ]:
                     setattr(book, key, data[key])
                     setattr(book, "date_updated", datetime.now())
