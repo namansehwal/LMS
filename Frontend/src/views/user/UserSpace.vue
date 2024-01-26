@@ -53,18 +53,23 @@
               <td>{{ accessLog.book_name }}</td>
               <td>{{ accessLog.status }}</td>
               <td>{{ accessLog.issue_date }}</td>
-              <tr><td>
-                <select class="rating-select" v-model="accessLog.rating" v-if="accessLog.status === 'Issued'">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                </select>
-              </td>
               <td>
-                <button class="btn btn-primary submit-rating-btn" v-if="accessLog.status === 'Issued'" @click="submitRating(accessLog)">Submit Rating</button>
-              </td></tr>
+                <!-- <select class="rating-select" v-model="accessLog.rating" v-if="accessLog.status === 'Issued'"> -->
+                <div class="d-flex justify-content-center">
+                  <div class="col col-auto">
+                    <select class="rating-select mr-2" v-model="accessLog.rating" v-if="accessLog.status === 'Issued'">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                  </div>
+                  <div class="col-7">
+                    <button class="btn btn-primary submit-rating-btn" v-if="accessLog.status === 'Issued'" @click="submitRating(accessLog)">Submit Rating</button>
+                  </div>
+                </div>
+              </td>
               <td>
                 <button class="btn btn-danger" v-if="accessLog.status === 'Issued'" @click="returnBook(accessLog.id)">Return</button>
               </td>
@@ -337,11 +342,17 @@
 .rating-select {
   padding: 3px;
   border-radius: 10px;
+  border: 2px solid #35dc4b;
+  background-color: #d697bc;
+  font-weight: bold;
+  text-align: center;
+
 }
 
 .submit-rating-btn {
   font-weight: bold;
 }
+
 </style>
 
   

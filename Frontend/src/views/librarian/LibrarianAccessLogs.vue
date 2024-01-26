@@ -38,8 +38,20 @@
               <td v-if="log.due_date">{{ formatDateTime(log.due_date) }}</td>
               <td v-else>N/A</td>
               <td>
-                <button v-if="log.status === 'Issued'" class="btn btn-danger btn-sm" @click="revokeAccesss(log.id)">Revoke</button>
-                <button v-else class="btn btn-danger btn-sm" disabled>Revoke</button>
+                <!-- <button v-if="log.status === 'Issued'" class="btn btn-danger btn-sm" @click="revokeAccesss(log.id)">Revoke</button>
+                <button v-else class="btn btn-danger btn-sm" disabled>Revoke</button> -->
+                <template v-if="log.status === 'Issued'">
+                  <button class="btn btn-danger btn-sm" @click="revokeAccesss(log.id)">Revoke</button>
+                </template>
+                <template v-else-if="log.status === 'Returned'">
+                  <span class="returned-date">Returned on {{ formatDateTime(log.return_date) }}</span>
+                </template>
+                <template v-else-if="log.status === 'Revoked'">
+                  <span class="revoked-date">Revoked on {{ formatDateTime(log.revoke_date) }}</span>
+                </template>
+                <template v-else>
+                  N/A
+                </template>
               </td>
             </tr>
           </tbody>
@@ -176,6 +188,16 @@ export default {
   width: 100%;
   box-sizing: border-box;
   margin-left: auto;
+}
+
+.returned-date {
+  color: #4CAF50; /* Green */
+  font-weight: bold;
+}
+
+.revoked-date {
+  color: #ff00f2; /* Red */
+  font-weight: bold;
 }
 
 </style>
