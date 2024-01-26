@@ -72,6 +72,9 @@
               </td>
               <td>
                 <button class="btn btn-danger" v-if="accessLog.status === 'Issued'" @click="returnBook(accessLog.id)">Return</button>
+                <span v-else-if="accessLog.status === 'Returned'" class="returned-date">Returned on {{ accessLog.return_date }}</span>
+                <span v-else-if="accessLog.status === 'Revoked'" class="revoked-date">Revoked on {{ accessLog.revoke_date }}</span>
+                <span v-else>{{ accessLog.status }}</span>
               </td>
             </tr>
           </tbody>
@@ -353,6 +356,15 @@
   font-weight: bold;
 }
 
+.returned-date {
+  color: #4CAF50; /* Green */
+  font-weight: bold;
+}
+
+.revoked-date {
+  color: #ff00f2; /* Red */
+  font-weight: bold;
+}
 </style>
 
   
