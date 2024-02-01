@@ -2,7 +2,7 @@ from flask import request, jsonify
 from model import db, Book, BookRequest, AccessLog, Rating
 from flask_jwt_extended import jwt_required
 from datetime import datetime
-
+from app import cache
 
 # @jwt_required()
 def bookAPI():
@@ -14,6 +14,7 @@ def bookAPI():
         return jsonify(books), 200
 
     if request.method == "POST":
+        cache.clear()
         data = request.get_json()
         required_keys = [
             "name",
@@ -55,6 +56,7 @@ def bookAPI():
         return jsonify({"message": "Book created successfully"}), 201
 
     if request.method == "PUT":
+        cache.clear()
         data = request.get_json()
         book = Book.query.get(data.get("id"))
         if book:
@@ -78,6 +80,7 @@ def bookAPI():
         return jsonify({"error": "Book not found"}), 404
 
     if request.method == "DELETE":
+        cache.clear()
         data = request.get_json()
         book = Book.query.get(data.get("id"))
         if book:

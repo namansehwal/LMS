@@ -1,10 +1,11 @@
 from flask import request, jsonify
 from model import db, Section, Book, BookRequest, AccessLog, Rating
 from flask_jwt_extended import jwt_required
-
+from app import cache
 
 # Use the jwt_required decorator if authentication is required for this endpoint
 # @jwt_required()
+@cache.cached(timeout=300, query_string=True, unless=lambda: request.method != 'GET')
 def sectionAPI():
     if request.method == "GET":
         # Use try-except block to handle potential errors in querying the database
@@ -24,6 +25,7 @@ def sectionAPI():
             return jsonify({"error": str(e)}), 500
 
     if request.method == "POST":
+        cache.clear()
         data = request.get_json()
         required_keys = ["name", "description"]
         missing_keys = [field for field in required_keys if field not in data]
@@ -45,6 +47,7 @@ def sectionAPI():
             return jsonify({"error": str(e)}), 500
 
     if request.method == "PUT":
+        cache.clear()
         data = request.get_json()
         section = Section.query.get(data.get("id"))
         if section:
@@ -60,6 +63,7 @@ def sectionAPI():
         return jsonify({"error": "Section not found"}), 404
 
     if request.method == "DELETE":
+        cache.clear()
         data = request.get_json()
         section = Section.query.get(data.get("id"))
         if section:
