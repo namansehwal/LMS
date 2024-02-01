@@ -12,7 +12,8 @@
 
         <!-- Search Box -->
         <div class="search-box mx-auto">
-          <input type="text" class="form-control" placeholder="Search..." v-model="searchTerm" @input="search">
+          <input type="text" class="form-control" placeholder="Search..." v-model="searchQuery" @input="updateSearchQuery">
+          <button @click="searchBooks">Search</button>
         </div>
 
         <!-- Logout Button -->
@@ -50,11 +51,36 @@
 </template>
 
 <script>
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+
 export default {
+  setup() {
+    const store = useStore();
+    const searchQuery = ref('');
+
+    const searchBooks =  async () => {
+      console.log('Search books method called');
+      try {
+        await store.dispatch('searchBooks', searchQuery.value);
+      } catch (error) {
+        console.error('Error searching books:', error);
+      }
+    };
+
+    const updateSearchQuery = () => {
+      store.commit('setSearchQuery', searchQuery.value);
+    };
+
+    return {
+      searchQuery,
+      searchBooks,
+      updateSearchQuery,
+    };
+  },
   data() {
     return {
       sidebarVisible: false,
-      searchTerm: "", // New property to hold the search term
     };
   },
   methods: {
@@ -64,13 +90,6 @@ export default {
     logout() {
       localStorage.clear();
       location.reload();
-    },
-    search() {
-      // Perform search logic here and navigate to "/user/books"
-      this.$router.push({
-        path: "/user/books",
-        query: { search: this.searchTerm },
-      });
     },
   },
 };

@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from model import db, BookRequest, User, Book, AccessLog, Rating
+from model import db, BookRequest, User, Book, AccessLog, Rating, Section
 from flask_jwt_extended import jwt_required
 from datetime import datetime
 from flask.views import MethodView
@@ -231,3 +231,41 @@ class BookRating(MethodView):
 
         return jsonify({"message": "Book rating created successfully"}), 201
 
+def book_search():
+    if request.method == "GET":
+        try:
+            query = request.args.get('query')
+
+            # Handle empty query
+            if query is None or query.strip() == '':
+                return jsonify([])  # Return an empty list for an empty query
+
+            # Perform search based on name, author, or section
+            books = Book.query.filter(
+                (Book.name.ilike(f'{query}')) |
+                (Book.author.ilike(f'{query}')) |
+                (Book.section.has(Section.name.ilike(f'{query}')))  # Corrected filter for section
+            ).all()
+
+            # Convert books to a JSON response
+            books_list = [
+                {
+                    'id': book.id,
+                    'name': book.name,
+                    'author': book.author,
+                    'section': book.section.name
+                    # Add other fields as needed
+                }
+                for book in books
+            ]
+
+            # Debugging: print search query and found books to console
+            print(f"Search query: {query}")
+            print(f"Found books: {books_list}")
+
+            return jsonify(books_list)
+
+        except Exception as e:
+            # Error handling: print the error and return an error response
+            print(f"Error during book search: {str(e)}")
+            return jsonify({'error': 'An error occurred during the search.'}), 500

@@ -9,7 +9,6 @@
       
       <div class="d-flex flex-wrap">
         <div v-for="book in recentlyAddedBooks" :key="book.id" class="col-lg-12 mb-4">
-          <!-- Display recently added books as you did for Explore Library -->
           <div class="card-body recent-book-card">
             <h6 class="card-title book-title"><b>{{ book.name }}</b></h6>
             <p class="card-text book-info"><strong>Author:</strong> {{ book.author }}</p>
@@ -42,7 +41,6 @@
 
       <div class="d-flex flex-wrap">
         <div v-for="book in topRatedBooks" :key="book.id" class="col-lg-12 mb-4">
-          <!-- Display top-rated books as you did for Explore Library -->
           <div class="card-body top-issued-book-card">
             <h6 class="card-title book-title"><b>{{ book.name }}</b></h6>
             <p class="card-text book-info"><strong>Author:</strong> {{ book.author }}</p>
@@ -51,7 +49,6 @@
             <div v-if="book.averageRating !== undefined" class="star-rating-container">
               <p class="card-text book-info"><strong>Rating:</strong></p>
               <div class="star-rating">
-                <!-- <span v-if="book.averageRating === 0">&#9734;</span> -->
                 <span v-for="star in 5" :class="{ filled: star <= book.averageRating }">&#9733;</span>
               </div>
             </div>
@@ -73,12 +70,12 @@
         <h2 class="text-center mb-6"><b><i><u>Explore Library...</u></i></b></h2>
       </div>
 
-      <div v-for="section in filteredSections" :key="section.id" class="col-lg-12 mb-4">
+      <div v-for="section in sections" :key="section.id" class="col-lg-12 mb-4">
         <div class="section-heading mb-1">
           <h3>{{ section.name }}</h3>
         </div>
         <div class="card-deck">
-          <div v-for="book in filteredBooksBySection(section.id)" :key="book.id" class="card">
+          <div v-for="book in getBooksBySection(section.id)" :key="book.id" class="card">
             <div class="card-body">
               <h6 class="card-title book-title"><b>{{ book.name }}</b></h6>
               <p class="card-text book-info"><strong>Author:</strong> {{ book.author }}</p>
@@ -87,7 +84,6 @@
               <div v-if="book.averageRating !== undefined" class="star-rating-container">
                 <p class="card-text book-info"><strong>Rating:</strong></p>
                 <div class="star-rating">
-                  <!-- <span v-if="book.averageRating === 0">&#9734;</span> -->
                   <span v-for="star in 5" :class="{ filled: star <= book.averageRating }">&#9733;</span>
                 </div>
               </div>
@@ -103,27 +99,36 @@
         </div>
       </div>
     </div>
+
+    <!-- Display the search results -->
+    <div v-if="searchResults.length > 0">
+      <ul>
+        <li v-for="book in searchResults" :key="book.id">
+          {{ book.name }} by {{ book.author }} (Section: {{ book.section }})
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+
 export default {
+  setup() {
+    const store = useStore();
+    const searchResults = computed(() => store.state.searchResults);
+
+    return {
+      searchResults
+    };
+  },
   data() {
     return {
       books: [],
       sections: [],
-      searchTerm: "",
     };
-  },
-  watch: {
-    $route(to, from) {
-      // Update the searchTerm when the route changes
-      this.searchTerm = to.query.search || "";
-    },
-    searchTerm(newVal, oldVal) {
-      // Update the route query when the searchTerm changes
-      this.$router.replace({ query: { search: newVal } });
-    },
   },
   computed: {
     recentlyAddedBooks() {
@@ -136,25 +141,6 @@ export default {
       const ratedBooks = this.books.filter((book) => book.averageRating !== undefined);
       const sortedBooks = ratedBooks.slice().sort((a, b) => b.averageRating - a.averageRating);
       return sortedBooks.slice(0, 5); // Display the top 5 rated books
-    },
-    filteredBooks() {
-      // Filter books based on the search term
-      const searchTermLowerCase = this.searchTerm.toLowerCase();
-      return this.books.filter((book) => {
-        const lowerCaseName = book.name.toLowerCase();
-        const lowerCaseAuthor = book.author.toLowerCase();
-
-        return (
-          lowerCaseName.includes(searchTermLowerCase) ||
-          lowerCaseAuthor.includes(searchTermLowerCase) ||
-          this.sections.find((section) => section.id === book.section_id).name.toLowerCase().includes(searchTermLowerCase)
-        );
-      });
-    },
-    filteredSections() {
-      // Filter sections based on the search term
-      const searchTermLowerCase = this.searchTerm.toLowerCase();
-      return this.sections.filter((section) => section.name.toLowerCase().includes(searchTermLowerCase));
     },
   },
   methods: {
@@ -207,18 +193,10 @@ export default {
       }  
     },
     getBooksBySection(sectionId) {
-      // Filter books by section
       return this.books.filter((book) => book.section_id === sectionId);
     },
-    filteredBooksBySection(sectionId) {
-      // Filter books by section based on the search term
-      return this.filteredBooks.filter((book) => book.section_id === sectionId);
-    },
     async requestToIssue(bookId) {
-      // Add your logic for requesting to issue a book
       try {
-        // You might want to send a request to the server to handle the book issuance request
-        // make a POST request to /book/request with the book ID and user ID
         const response = await this.$axios.post('/book/request', {
           book_id: bookId,
           user_id: localStorage.getItem('user_id'),
@@ -240,13 +218,13 @@ export default {
   <style scoped>
   /* Styles for section heading */
   .section-heading {
-    background-color: #96c5b0; /* Darker gray color */
-    color: #7107b7c4; /* White text */
+    background-color: #96c5b0; 
+    color: #7107b7c4;
     padding: 5px;
     border-radius: 10px;
     margin-bottom: 10px;
     border: 3px solid #3d7e61;
-    box-shadow: 0 2px 4px rgba(5, 5, 194, 0.1); /* Subtle box-shadow */
+    box-shadow: 0 2px 4px rgba(5, 5, 194, 0.1);
   }
 
   /* Styles for card deck and cards */
@@ -268,7 +246,7 @@ export default {
     border: 1px solid #456789;
     border-radius: 10px;
     transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 2px 4px rgba(31, 3, 3, 0.1); /* Subtle box-shadow */
+    box-shadow: 0 2px 4px rgba(31, 3, 3, 0.1);
   }
 
   .card-body {
@@ -276,29 +254,29 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: left;
-  padding: 5px; /* Adjust padding based on your design */
+  padding: 5px;
   line-height: 0.1;
-  background-color: #e7c8c8; /* Light background color */
-  border-radius: 10px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(17, 1, 33, 0.1); /* Subtle box-shadow */
+  background-color: #e7c8c8; 
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(17, 1, 33, 0.1); 
  }
   .card:hover {
     transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Elevated box-shadow on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   }
 
   /* Styling for the book title */
 .book-title {
-  font-size: 1.2rem; /* Larger font size */
-  color: #34061e; /* Dark text color */
-  margin-bottom: 10px; /* Spacing at the bottom */
+  font-size: 1.2rem; 
+  color: #34061e; 
+  margin-bottom: 10px; 
   text-align: center
 }
 
 /* Styling for book information (author and ISBN) */
 .book-info {
-  color: #6d4a0a; /* Slightly muted text color */
-  margin-bottom: 20px; /* Spacing at the bottom */
+  color: #6d4a0a; 
+  margin-bottom: 20px; 
 }
 
   /* Styles for buttons */
@@ -317,23 +295,23 @@ export default {
 
 
   .star-rating {
-    color: #9e9ca7; /* Golden yellow color for stars */
+    color: #9e9ca7; 
   }
 
   .filled {
-    color: #ff0008; /* Filled stars should also be golden yellow */
+    color: #ff0008; 
   }
 
 
   .star-rating-container {
-    margin-bottom: 10px; /* Adjust the margin as needed */
+    margin-bottom: 10px;
     font-size: 15px;
     display: flex;
   }
 
   .recent-book-card {
-  background: linear-gradient(45deg, #87CEEB, #4aa161); /* Gradient background */
-  border: 1px solid #553403; /* White border */
+  background: linear-gradient(45deg, #87CEEB, #4aa161); 
+  border: 1px solid #553403; 
   box-shadow: 0 2px 4px rgba(26, 183, 17, 0.1);
   min-width: 100px;
   margin-right: 10px;
@@ -345,8 +323,8 @@ export default {
   }
 
 .top-issued-book-card {
-  background: linear-gradient(45deg, #b6a753, #a33f83); /* Gradient background */
-  border: 1px solid #760606; /* White border */
+  background: linear-gradient(45deg, #b6a753, #a33f83); 
+  border: 1px solid #760606; 
   box-shadow: 0 2px 4px rgba(67, 3, 3, 0.1);
   min-width: 100px;
   margin-right: 10px;
