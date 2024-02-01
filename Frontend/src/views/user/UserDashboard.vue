@@ -1,3 +1,4 @@
+User
 <template>
   <div>
     <!-- Top Navbar -->
@@ -11,9 +12,9 @@
         </router-link>
 
         <!-- Search Box -->
-        <div class="search-box mx-auto">
+        <div class="search-box d-flex">
           <input type="text" class="form-control" placeholder="Search..." v-model="searchQuery" @input="updateSearchQuery">
-          <button @click="searchBooks">Search</button>
+          <button @click="searchBooks" class="btn btn-primary ml-2">Search</button>
         </div>
 
         <!-- Logout Button -->
@@ -63,6 +64,7 @@ export default {
       console.log('Search books method called');
       try {
         await store.dispatch('searchBooks', searchQuery.value);
+        searchQuery.value = '';
       } catch (error) {
         console.error('Error searching books:', error);
       }

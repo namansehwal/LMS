@@ -1,6 +1,47 @@
 <template>
   <div class="container mt-2">
 
+    <!-- Display the search results -->
+    <div class="row">
+      <div class="col-lg-12 mb-1">
+        <h2 class="text-center mb-6"><b><i><u>Search Results</u></i></b></h2>
+      </div>
+
+      <div class="d-flex flex-wrap">
+        <div v-if="searchResults.length > 0" class="col-lg-12 mb-4">
+          <div v-for="book in searchResults" :key="book.id" class="search-result-card">
+            <div class="card-body">
+              <p class="card-text book-info">
+                <strong>Book:</strong> {{ book.name }}
+              </p>
+              <p class="card-text book-info">
+                <strong>Author:</strong> {{ book.author }}
+              </p>
+              <p class="card-text book-info">
+                <strong>Section:</strong> {{ book.section }}
+              </p>
+              <div v-if="book.averageRating !== undefined" class="star-rating-container">
+                <p class="card-text book-info"><strong>Rating:</strong></p>
+                <div class="star-rating">
+                  <span v-for="star in 5" :class="{ filled: star <= book.averageRating }">&#9733;</span>
+                </div>
+              </div>
+              <div v-else class="star-rating-container">
+                <p class="card-text book-info"><strong>Rating:</strong></p>
+                <div class="star-rating">
+                  <span v-for="star in 5">&#9733;</span>
+                </div>
+              </div>
+              <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to Issue</button>
+            </div>
+          </div>
+        </div>
+        <div v-else class="col-lg-12 mb-4">
+          <p class="text-center">No results found.</p>
+        </div>
+      </div>
+    </div>
+
     <!-- Recently Added Books -->
     <div class="row">
       <div class="col-lg-12 mb-1">
@@ -17,7 +58,6 @@
             <div v-if="book.averageRating !== undefined" class="star-rating-container">
               <p class="card-text book-info"><strong>Rating:</strong></p>
               <div class="star-rating">
-                <!-- <span v-if="book.averageRating === 0">&#9734;</span> -->
                 <span v-for="star in 5" :class="{ filled: star <= book.averageRating }">&#9733;</span>
               </div>
             </div>
@@ -99,29 +139,42 @@
         </div>
       </div>
     </div>
-
-    <!-- Display the search results -->
-    <div v-if="searchResults.length > 0">
-      <ul>
-        <li v-for="book in searchResults" :key="book.id">
-          {{ book.name }} by {{ book.author }} (Section: {{ book.section }})
-        </li>
-      </ul>
-    </div>
   </div>
 </template>
 
 <script>
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 
 export default {
   setup() {
     const store = useStore();
     const searchResults = computed(() => store.state.searchResults);
+    const searchType = ref('');
+    const searchQuery = ref('');
+
+    const setSearchType = (type) => {
+      searchType.value = type;
+    };
+
+    const searchBooks = async () => {
+      console.log('Search books method called');
+      try {
+        setSearchType(determineSearchType()); // Update searchType
+        await store.dispatch('searchBooks', searchQuery.value);
+        console.log('Search results:', searchResults.value);
+        // searchResults.value.forEach(book => console.log('Book Section:', book.section));
+      } catch (error) {
+        console.error('Error searching books:', error);
+      }
+    };
 
     return {
-      searchResults
+      searchResults,
+      searchType,
+      setSearchType,
+      searchQuery,
+      searchBooks,
     };
   },
   data() {
@@ -159,7 +212,7 @@ export default {
         const response = await this.$axios.get('/section');
         this.sections = response.data;
       } catch (error) {
-        console.error('Get Sections failed:', error);
+        console.error('Error fetching sections:', error);
       }
     },
     async fetchRatingsForBooks() {
@@ -193,9 +246,11 @@ export default {
       }  
     },
     getBooksBySection(sectionId) {
+      // Filter books by section
       return this.books.filter((book) => book.section_id === sectionId);
     },
     async requestToIssue(bookId) {
+      // Add your logic for requesting to issue a book
       try {
         const response = await this.$axios.post('/book/request', {
           book_id: bookId,
@@ -219,12 +274,12 @@ export default {
   /* Styles for section heading */
   .section-heading {
     background-color: #96c5b0; 
-    color: #7107b7c4;
+    color: #7107b7c4; 
     padding: 5px;
     border-radius: 10px;
     margin-bottom: 10px;
     border: 3px solid #3d7e61;
-    box-shadow: 0 2px 4px rgba(5, 5, 194, 0.1);
+    box-shadow: 0 2px 4px rgba(5, 5, 194, 0.1); 
   }
 
   /* Styles for card deck and cards */
@@ -246,7 +301,7 @@ export default {
     border: 1px solid #456789;
     border-radius: 10px;
     transition: transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 2px 4px rgba(31, 3, 3, 0.1);
+    box-shadow: 0 2px 4px rgba(31, 3, 3, 0.1); 
   }
 
   .card-body {
@@ -254,7 +309,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: left;
-  padding: 5px;
+  padding: 5px; 
   line-height: 0.1;
   background-color: #e7c8c8; 
   border-radius: 10px;
@@ -276,7 +331,7 @@ export default {
 /* Styling for book information (author and ISBN) */
 .book-info {
   color: #6d4a0a; 
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 
   /* Styles for buttons */
@@ -304,7 +359,7 @@ export default {
 
 
   .star-rating-container {
-    margin-bottom: 10px;
+    margin-bottom: 10px; 
     font-size: 15px;
     display: flex;
   }
@@ -324,7 +379,7 @@ export default {
 
 .top-issued-book-card {
   background: linear-gradient(45deg, #b6a753, #a33f83); 
-  border: 1px solid #760606; 
+  border: 1px solid #760606; /* White border */
   box-shadow: 0 2px 4px rgba(67, 3, 3, 0.1);
   min-width: 100px;
   margin-right: 10px;
@@ -334,5 +389,18 @@ export default {
   border-radius: 10px;
   transition: transform 0.3s, box-shadow 0.3s;
 }
+
+.search-result-card {
+  background: #e7c8c8; 
+  border: 1px solid #6418bb; 
+  padding-top: 15px;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 
 </style>
