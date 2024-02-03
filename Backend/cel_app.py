@@ -1,6 +1,5 @@
 
 from utils.celery_worker import celery_init_app
-# from utils import tasks
 from celery.schedules import crontab
 from app import app
 
