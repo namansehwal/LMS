@@ -2,7 +2,7 @@ from flask import request, jsonify
 from model import db, Book, BookRequest, AccessLog, Rating
 from flask_jwt_extended import jwt_required
 from datetime import datetime
-from app import cache
+from cache import cache
 
 # @jwt_required()
 def bookAPI():

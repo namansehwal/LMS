@@ -1,6 +1,12 @@
-flask
-Flask-RESTful
-flask_sqlalchemy
-flask_bcrypt
+Flask
+Flask-SQLAlchemy  
+flask_restful
 flask_jwt_extended
 flask_cors
+flask_bcrypt
+celery
+secure-smtplib
+Flask-Caching
+redis
+httplib2
+ 

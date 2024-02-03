@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from model import db, Section, Book, BookRequest, AccessLog, Rating
 from flask_jwt_extended import jwt_required
-from app import cache
+from cache import cache
 
 # Use the jwt_required decorator if authentication is required for this endpoint
 # @jwt_required()
