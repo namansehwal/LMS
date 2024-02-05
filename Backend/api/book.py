@@ -5,6 +5,7 @@ from datetime import datetime
 from cache import cache
 
 # @jwt_required()
+@cache.cached(timeout=300, query_string=True, unless=lambda: request.method != 'GET')
 def bookAPI():
     if request.method == "GET":
         books_query = Book.query.all()

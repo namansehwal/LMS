@@ -5,7 +5,7 @@ from cache import cache
 
 # Use the jwt_required decorator if authentication is required for this endpoint
 # @jwt_required()
-# @cache.cached(timeout=300, query_string=True, unless=lambda: request.method != 'GET')
+@cache.cached(timeout=300, query_string=True, unless=lambda: request.method != 'GET')
 def sectionAPI():
     if request.method == "GET":
         # Use try-except block to handle potential errors in querying the database

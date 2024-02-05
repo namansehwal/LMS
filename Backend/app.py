@@ -19,13 +19,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 
-#✌️❤️📚
-# Run monthly activity report every minute  
-@celery_app.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
-    
-    # Run monthly activity report every minute
-    sender.add_periodic_task(crontab(minute='*', hour='*'), tasks.monthly_activity_report.s())
+
 
 
 
@@ -33,6 +27,16 @@ def setup_periodic_tasks(sender, **kwargs):
 
 if __name__ == '__main__':
     db.init_app(app)
+    #✌️❤️📚
+    # Run monthly activity report every minute  
+    @celery_app.on_after_configure.connect
+    def setup_periodic_tasks(sender, **kwargs):
+        
+        from utils import celery_task as tasks
+        # Reminding users to login
+        sender.add_periodic_task(crontab(minute='*', hour='*'), tasks.daily_reminders.s())
+        
+        
     with app.app_context():
         db.create_all()
 
@@ -43,5 +47,7 @@ if __name__ == '__main__':
         # check if book is returned
         from utils.check_return import update_access_logs
         update_access_logs()
+        
+ 
 
     app.run(debug=True)    
