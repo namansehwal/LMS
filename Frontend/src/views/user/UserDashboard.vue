@@ -31,16 +31,16 @@ User
     <!-- Sidebar Menu -->
     <div v-if="sidebarVisible" class="sidebar">
       <div class="sidebar-header">
-        <router-link to="/user/books"><img src="/user_books.jpg" alt="user_books" class="img">Books</router-link>
+        <router-link to="/user/books" class="text-decoration-none text-muted"><h2>📖 Books</h2></router-link>
       </div>
       <div class="sidebar-header">
-        <router-link to="/user/profile"><img src="/profile.jpg" alt="profile" class="img">Profile</router-link>
+        <router-link to="/user/profile" class="text-decoration-none text-muted"><h2>👤 Profile</h2></router-link>
       </div>
       <div class="sidebar-header">
-        <router-link to="/user/space"><img src="/space.jpg" alt="space" class="img">My Library Space</router-link>
+        <router-link to="/user/space" class="text-decoration-none text-muted"><h2>🚀 My Space</h2></router-link>
       </div>
       <div class="sidebar-header">
-        <router-link to="/user/read"><img src="/read.webp" alt="notifications" class="img">Read</router-link>
+        <router-link to="/user/read" class="text-decoration-none text-muted"><h2>😴 Read</h2></router-link>
       </div>  
     </div>
 
