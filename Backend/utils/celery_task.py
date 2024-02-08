@@ -15,8 +15,7 @@ def daily_reminders():
         if user.last_login != current_date:
             html_reminder = create_html_reminder(user)
             send_email(user.email, 'Reminder', html_reminder)
-            print('Reminder sent to '+ user.username)
-            # google_chat_webhook(user.username)
+            google_chat_webhook(user.username)
     
 
 

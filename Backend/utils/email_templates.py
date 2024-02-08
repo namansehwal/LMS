@@ -92,7 +92,7 @@ def create_html_reminder(user):
             </div>
             <div class="content">
                 <p>Dear {{ user.username | upper  }},</p>
-                <p>You have not returned your borrowed books. Please return them by the due date.</p>
+                <p>You have not visited today, \n Please visit soon...</p>
             </div>
             <div class="footer">
                 <p>Thank you for using the library services.</p>
@@ -109,7 +109,7 @@ def create_html_reminder(user):
 
 def google_chat_webhook(user):
     """Google Chat incoming webhook with a card message resembling an HTML template."""
-    url = "https://chat.googleapis.com/v1/spaces/AAAA7MSq7Cw/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=6qGFxBH5DrboF2epaqFr_m8xFx1iUEMafNgRdQrxnR0"
+    url = "https://chat.googleapis.com/v1/spaces/AAAA-FLsPaI/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=dV8ISy3pDcrzL8hXW5E6SClrC00SiYlQmSVs9M82ZTQ"
 
     # Replace with actual user information
     username = user
@@ -132,7 +132,7 @@ def google_chat_webhook(user):
                             },
                             {
                                 "textParagraph": {
-                                    "text": "You have not returned your borrowed books. Please return them by the due date."
+                                    "text": "You have not visited today, \n Please visit soon....👌"
                                 }
                             }
                         ]
@@ -152,4 +152,4 @@ def google_chat_webhook(user):
         body=dumps(card_message),
     )
     if response[0].status == 200:
-        print("Message successfully posted to Google Chat for user: ", username)
+        print("Message successfully posted to Google Chat for user: "+ username)
