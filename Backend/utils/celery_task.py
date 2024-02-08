@@ -15,11 +15,29 @@ def daily_reminders():
         if user.last_login != current_date:
             html_reminder = create_html_reminder(user)
             send_email(user.email, 'Reminder', html_reminder)
-            print('Reminder sent to', user.username)
+            print('Reminder sent to '+ user.username)
             # google_chat_webhook(user.username)
     
 
-    
+
+@shared_task(ignore_result=True)
+def monthly_activity_report():
+
+    Users = User.query.filter_by(user_type='user').all()
+    AccessLogs = AccessLog.query.all()
+
+    for user in Users:
+        books_borrowed = []
+        for log in AccessLogs:
+            if log.user_id == user.id:
+                books_borrowed.append(log)
+        
+        html_report = create_html_report(username=user.username, access_logs=books_borrowed)
+        send_email(user.email, 'Monthly Activity Report', html_report)
+        print('Monthly Activity Report sent to ' + user.username)
+
+
+
 @shared_task(ignore_result=True)
 def update_access_logs():
     issued_logs = AccessLog.query.filter_by(status='Issued').all()

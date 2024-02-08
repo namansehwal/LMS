@@ -4,7 +4,7 @@ from httplib2 import Http
 from jinja2 import Template
 from datetime import datetime
 
-def create_html_report(user, books_borrowed, return_date):
+def create_html_report(username, access_logs):
     # Load HTML template (assuming you have an HTML template file)
     template = """
     <!DOCTYPE html>
@@ -13,7 +13,7 @@ def create_html_report(user, books_borrowed, return_date):
         <title>Monthly Activity Report</title>
         <style type="text/css">
             body { font-family: Arial, sans-serif; }
-            .container { width: 100%; max-width: 600px; margin: auto; }
+            .container { width: 100%; max-width: 800px; margin: auto; }
             .header { background-color: #4CAF50; padding: 10px; text-align: center; color: white; }
             .content { background-color: #ffffff; padding: 20px; }
             .footer { background-color: #333; padding: 10px; text-align: center; color: white; }
@@ -25,27 +25,29 @@ def create_html_report(user, books_borrowed, return_date):
     <body>
         <div class="container">
             <div class="header">
-                <img src="https://raw.githubusercontent.com/namansehwal/Assets/main/library_logo.png" alt="Library Logo" style="max-width: 100px;"/>
-                <h2>Library Monthly Activity Report</h2>
+                <img src="https://assets.stickpng.com/thumbs/61f7cd1767553f0004c53e6e.png" alt="Library Logo" style="max-width: 100px;"/>
+                <h2>Library Monthly Activity Report </h2>
             </div>
             <div class="content">
-                <p>Dear {{ user.username | upper  }},</p>
+                <p>Dear {{username | upper  }},</p>
                 <p>Here is your activity report for the month.</p>
 
-                <h3>Books Borrowed Summary</h3>
+                <center><u><h1>Books Access Summary</h1></u></center>
+                {{ access_logs | length }} books accessed in the month.
                 <table>
                     <tr>
-                        <th>Book ID</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Return Date</th>
+                        <th>Book </th>
+                        <th>Status</th>
+                        <th>Issue Date</th>
+                        <th>Due Date</th>
                     </tr>
-                    {% for book in books_borrowed %}
+                    {% for book in access_logs %}
                     <tr>
-                        <td>{{ book.id }}</td>
-                        <td>{{ book.title }}</td>
-                        <td>{{ book.author }}</td>
-                        <td>{{ return_date }}</td>
+                        <td>{{ book.book_name }}</td>
+                        <td>{{ book.status }}</td>
+                        <td>{{ book.issue_date.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ book.due_date.strftime('%Y-%m-%d') }}</td>
+                        
                     </tr>
                     {% endfor %}
                 </table>
@@ -60,7 +62,7 @@ def create_html_report(user, books_borrowed, return_date):
     """
 
     # Render the template with the user's data
-    html_report = Template(template).render(user=user, books_borrowed=books_borrowed, return_date=return_date)
+    html_report = Template(template).render(username=username, access_logs=access_logs)
 
     return html_report
 

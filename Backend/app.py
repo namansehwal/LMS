@@ -23,6 +23,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
         
 with app.app_context():
     db.create_all()
+
     # Create Librarian as Admin if not exists
     librarian_setup()   
     
@@ -37,6 +38,9 @@ def setup_periodic_tasks(sender, **kwargs):
 
     # Update access logs
     sender.add_periodic_task(crontab(minute='*', hour='*'), tasks.update_access_logs.s())
+
+    # Monthly activity report
+    sender.add_periodic_task(crontab(minute='*', hour='*'), tasks.monthly_activity_report.s())
     
 
 if __name__ == '__main__':
