@@ -5,15 +5,10 @@
       <div class="container">
         <!-- Logo and Name -->
         <router-link to="/librarian" class="navbar-brand" @click="toggleSidebar">
-          <!-- Correct path to the image within the public folder -->
-          <img src="/admin.jpg" alt="admin" class="img">
           LMS (Librarian)
         </router-link>
 
-        <!-- Search Box -->
-        <div class="search-box mx-auto">
-          <input type="text" class="form-control" placeholder="Search...">
-        </div>
+      
 
         <!-- Logout Button -->
         <button @click="logout" class="btn btn-danger ml-auto">Logout</button>
@@ -28,26 +23,35 @@
 
     <!-- Sidebar Menu -->
     <div v-if="sidebarVisible" class="sidebar">
-        <div class="sidebar-header">
-            <router-link to="/librarian/sections"><img src="/sections.jpg" alt="sections" class="img">Sections</router-link>
+      <div class="sidebar-header">
+            <router-link to="/librarian/stats_and_graphs">Dashboard</router-link>    
         </div>
         <div class="sidebar-header">
-            <router-link to="/librarian/books"><img src="/lms_books.jpg" alt="lms_books" class="img">Books</router-link>
+            <router-link to="/librarian/sections">Sections</router-link>
         </div>
         <div class="sidebar-header">
-            <router-link to="/librarian/accesslogs"><img src="/access.png" alt="access" class="img">Access Logs</router-link>
+            <router-link to="/librarian/books">Books</router-link>
+        </div>
+        
+        <div class="sidebar-header">
+            <router-link to="/librarian/requests">Requests</router-link>
         </div>
         <div class="sidebar-header">
-            <router-link to="/librarian/requests"><img src="/request.jpeg" alt="request" class="img">Requests</router-link>
-        </div>
-        <div class="sidebar-header">
-            <router-link to="/librarian/stats_and_graphs"><img src="/dashboard.jpg" alt="dashboard" class="img">Stats_and_Graphs</router-link>    
+            <router-link to="/librarian/accesslogs">Access Logs</router-link>
         </div>
     </div>
 
     <!-- Main Content -->
     <div class="main-content" :style="{ marginLeft: sidebarVisible ? '250px' : '0' }">
       <router-view></router-view>
+      <div v-if="$route.path === '/librarian'">
+        <h1 class="m-2">Welcome to the Library</h1>
+        <hr>
+        <p class="h2">You can manage sections, books, access logs, requests, and view stats and graphs from the sidebar.</p>
+
+        
+      
+      </div>
     </div>
   </div>
 </template>
