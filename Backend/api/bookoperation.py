@@ -253,7 +253,8 @@ def book_search():
                     'id': book.id,
                     'name': book.name,
                     'author': book.author,
-                    'section': book.section.name
+                    'section': book.section.name,
+                    'image_url': book.image_url
                     # Add other fields as needed
                 }
                 for book in books

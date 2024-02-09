@@ -9,19 +9,21 @@
 
       <div class="d-flex flex-wrap justify-content-center">
         <div v-if="searchResults.length > 0" class="col-lg-3 mb-4">
-          <div v-for="book in searchResults" :key="book.id" class="card search-result-card">
-            <img :src="book.image_url" class="card-img-top img-fluid" alt="Book Image">
-            <div class="card-body">
-              <h5 class="card-title"><b>{{ book.name }}</b></h5>
-              <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
-              <p class="card-text"><strong>Section:</strong> {{ book.section }}</p>
-              <div v-if="book.averageRating !== undefined" class="star-rating-container">
-                <p class="card-text"><strong>Rating:</strong></p>
-                <div class="star-rating">
-                  <span v-for="star in 5" :class="{ filled: star <= book.averageRating }">&#9733;</span>
+          <div v-for="book in searchResults" :key="book.id">
+            <div class="card search-result-card">
+              <img :src="book.image_url" class="card-img-top img-fluid" alt="Book Image">
+              <div class="card-body">
+                <h5 class="card-title"><b>{{ book.name }}</b></h5>
+                <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
+                <p class="card-text"><strong>Section:</strong> {{ book.section }}</p>
+                <div v-if="book.averageRating !== undefined" class="star-rating-container">
+                  <p class="card-text"><strong>Rating:</strong></p>
+                  <div class="star-rating">
+                    <span v-for="star in 5" :class="{ filled: star <= book.averageRating }">&#9733;</span>
+                  </div>
                 </div>
+                <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to Issue</button>
               </div>
-              <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to Issue</button>
             </div>
           </div>
         </div>
@@ -40,7 +42,9 @@
       <div class="d-flex flex-wrap justify-content-center">
         <div v-for="book in recentlyAddedBooks" :key="book.id" class="col-lg-3 mb-4">
           <div class="card recent-book-card">
-            <img :src="book.image_url" class="card-img-top img-fluid" alt="Book Image">
+            <div class="card-img-top half">
+              <img :src="book.image_url" class="card-img-top img-fluid" alt="Book Image">
+            </div>
             <div class="card-body">
               <h5 class="card-title"><b>{{ book.name }}</b></h5>
               <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
