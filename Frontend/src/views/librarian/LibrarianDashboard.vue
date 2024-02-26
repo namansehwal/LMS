@@ -5,7 +5,7 @@
       <div class="container">
         <!-- Logo and Name -->
         <router-link to="/librarian" class="navbar-brand" @click="toggleSidebar">
-          LMS (Librarian)
+          <h1>🏛️ Library 🏛️ </h1>
         </router-link>
 
       
@@ -24,20 +24,20 @@
     <!-- Sidebar Menu -->
     <div v-if="sidebarVisible" class="sidebar">
       <div class="sidebar-header">
-            <router-link to="/librarian/stats_and_graphs">Dashboard</router-link>    
+            <router-link to="/librarian/stats_and_graphs" class="text-decoration-none text-muted"><h2>📈 Dashboard</h2></router-link>    
         </div>
         <div class="sidebar-header">
-            <router-link to="/librarian/sections">Sections</router-link>
+            <router-link to="/librarian/sections" class="text-decoration-none text-muted"><h2>📚 Sections</h2></router-link>
         </div>
         <div class="sidebar-header">
-            <router-link to="/librarian/books">Books</router-link>
+            <router-link to="/librarian/books" class="text-decoration-none text-muted"><h2>📒 Books</h2></router-link>
         </div>
         
         <div class="sidebar-header">
-            <router-link to="/librarian/requests">Requests</router-link>
+            <router-link to="/librarian/requests" class="text-decoration-none text-muted"><h2>⤴️ Requests</h2></router-link>
         </div>
         <div class="sidebar-header">
-            <router-link to="/librarian/accesslogs">Access Logs</router-link>
+            <router-link to="/librarian/accesslogs" class="text-decoration-none text-muted"><h2>⤵ Access Logs</h2></router-link>
         </div>
     </div>
 
