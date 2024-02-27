@@ -8,7 +8,7 @@
           <h1>🏛️ Library 🏛️ </h1>
         </router-link>
 
-      
+
 
         <!-- Logout Button -->
         <button @click="logout" class="btn btn-danger ml-auto">Logout</button>
@@ -24,21 +24,31 @@
     <!-- Sidebar Menu -->
     <div v-if="sidebarVisible" class="sidebar">
       <div class="sidebar-header">
-            <router-link to="/librarian/stats_and_graphs" class="text-decoration-none text-muted"><h2>📈 Dashboard</h2></router-link>    
-        </div>
-        <div class="sidebar-header">
-            <router-link to="/librarian/sections" class="text-decoration-none text-muted"><h2>📚 Sections</h2></router-link>
-        </div>
-        <div class="sidebar-header">
-            <router-link to="/librarian/books" class="text-decoration-none text-muted"><h2>📒 Books</h2></router-link>
-        </div>
-        
-        <div class="sidebar-header">
-            <router-link to="/librarian/requests" class="text-decoration-none text-muted"><h2>⤴️ Requests</h2></router-link>
-        </div>
-        <div class="sidebar-header">
-            <router-link to="/librarian/accesslogs" class="text-decoration-none text-muted"><h2>⤵ Access Logs</h2></router-link>
-        </div>
+        <router-link to="/librarian/stats_and_graphs" class="text-decoration-none text-muted">
+          <h2>📈 Dashboard</h2>
+        </router-link>
+      </div>
+      <div class="sidebar-header">
+        <router-link to="/librarian/sections" class="text-decoration-none text-muted">
+          <h2>📚 Sections</h2>
+        </router-link>
+      </div>
+      <div class="sidebar-header">
+        <router-link to="/librarian/books" class="text-decoration-none text-muted">
+          <h2>📒 Books</h2>
+        </router-link>
+      </div>
+
+      <div class="sidebar-header">
+        <router-link to="/librarian/requests" class="text-decoration-none text-muted">
+          <h2>📩 Requests</h2>
+        </router-link>
+      </div>
+      <div class="sidebar-header">
+        <router-link to="/librarian/accesslogs" class="text-decoration-none text-muted">
+          <h2>📝 Access Logs</h2>
+        </router-link>
+      </div>
     </div>
 
     <!-- Main Content -->
@@ -47,10 +57,11 @@
       <div v-if="$route.path === '/librarian'">
         <h1 class="m-2">Welcome to the Library</h1>
         <hr>
-        <p class="h2">You can manage sections, books, access logs, requests, and view stats and graphs from the sidebar.</p>
+        <p class="h2">You can manage sections, books, access logs, requests, and view stats and graphs from the sidebar.
+        </p>
 
-        
-      
+
+
       </div>
     </div>
   </div>
@@ -58,20 +69,20 @@
 
 <script>
 export default {
-    data() {
-        return {
-        sidebarVisible: false,
-        };
+  data() {
+    return {
+      sidebarVisible: false,
+    };
+  },
+  methods: {
+    toggleSidebar() {
+      this.sidebarVisible = !this.sidebarVisible;
     },
-    methods: {
-        toggleSidebar() {
-            this.sidebarVisible = !this.sidebarVisible;
-        },
-        logout() {
-            localStorage.clear();
-            location.reload();
-        }
+    logout() {
+      localStorage.clear();
+      location.reload();
     }
+  }
 };
 </script>
 
@@ -111,5 +122,4 @@ export default {
   transition: margin-left 0.3s;
   padding: 20px;
   margin-top: 60px;
-}
-</style>
+}</style>

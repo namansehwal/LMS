@@ -107,7 +107,8 @@ const routes = [
       {
         path: 'read',
         name: 'UserRead',
-        component: UserRead
+        component: UserRead,
+        
       }
     ]
   },

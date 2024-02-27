@@ -3,3 +3,5 @@ from app import app
 
 cache = Cache()
 cache.init_app(app)
+
+

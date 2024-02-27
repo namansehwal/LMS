@@ -76,10 +76,11 @@
             <td>
               <button class="btn btn-danger m-1" v-if="accessLog.status === 'Issued'"
                 @click="returnBook(accessLog.id)">Return</button>
-              <button class="btn btn-danger" v-if="accessLog.status === 'Issued'" @click="pdf(accessLog.book_id)">Download
-                PDF</button>
+              <button class="btn btn-danger" v-if="accessLog.status === 'Issued'"
+                @click="pdf(accessLog.book_id, accessLog.price)">Download
+                PDF for ₹{{ accessLog.price }}</button>
               <button class="btn btn-danger m-1" v-if="accessLog.status === 'Issued'"
-                @click="pdf(accessLog.book_id)">Read</button>
+                @click="read(accessLog.book_id)">Read</button>
               <span v-else-if="accessLog.status === 'Returned'" class="returned-date">Returned on {{ accessLog.return_date
               }}</span>
               <span v-else-if="accessLog.status === 'Revoked'" class="revoked-date">Revoked on {{ accessLog.revoke_date
@@ -135,7 +136,24 @@ export default {
       this.$axios.get('/book/access')
         .then(response => {
           this.issuedBooks = response.data;
-          
+
+          // check if the book is issued
+          this.issuedBooks.forEach(accessLog => {
+            if (accessLog.status === 'Issued') {
+              // Fetch the rating for the book
+              this.$axios.get(`/book`)
+                .then(response => {
+                  // add price to the issued book object
+                  const book = response.data.find(book => book.id === accessLog.book_id);
+                  accessLog.price = book.price;
+
+                })
+                .catch(error => {
+                  console.error('Error fetching rating', error);
+                });
+            }
+          });
+
         })
         .catch(error => {
           console.error('Error fetching issued books', error);
@@ -211,15 +229,38 @@ export default {
           console.error('Error returning book', error);
         });
     },
-    pdf(book_id) {
+    pdf(book_id, price) {
       //fetch all books from the server and filter the book with the given book_id and then download the pdf using the book.pdf_url
       console.log('Downloading PDF for book', book_id);
+      // prompt the user to pay for the book
+      if (confirm(`Do you want to buy the book for ₹${price}?`)) {
+        this.$axios.get('/book')
+          .then(response => {
+            const books = response.data;
+            const book = books.find(book => book.id === book_id);
+            if (book) {
+              window.open(book.pdf_url, '_blank');
+            } else {
+              alert('Book not found');
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching books', error);
+          });
+      }
+
+
+    },
+    read(book_id) {
+      //fetch all books from the server and filter the book with the given book_id and then download the pdf using the book.pdf_url
       this.$axios.get('/book')
         .then(response => {
           const books = response.data;
           const book = books.find(book => book.id === book_id);
           if (book) {
-            window.open(book.pdf_url, '_blank');
+            //redirect to the book's read page with params book.epub_url
+            const url = book.epub_url;
+            this.$router.push({ name: 'UserRead', query: { epub_url: url } });
           } else {
             alert('Book not found');
           }
@@ -235,8 +276,6 @@ export default {
   
   
 <style scoped>
-/* Add Bootstrap 4 styles here */
-
 .table {
   width: 90%;
   margin-bottom: 1rem;

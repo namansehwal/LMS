@@ -8,22 +8,21 @@
       </div>
 
       <div class="d-flex flex-wrap justify-content-center">
-        <div v-if="searchResults.length > 0" class="col-lg-3 mb-4">
-          <div v-for="book in searchResults" :key="book.id">
-            <div class="card search-result-card">
-              <img :src="book.image_url" class="card-img-top img-fluid" alt="Book Image">
-              <div class="card-body">
-                <h5 class="card-title"><b>{{ book.name }}</b></h5>
-                <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
-                <p class="card-text"><strong>Section:</strong> {{ book.section }}</p>
-                <div v-if="book.averageRating !== undefined" class="star-rating-container">
-                  <p class="card-text"><strong>Rating:</strong></p>
-                  <div class="star-rating">
-                    <span v-for="star in 5" :class="{ filled: star <= book.averageRating }">&#9733;</span>
-                  </div>
+        <div v-if="searchResults.length > 0" class="col-lg-6 mb-4">
+          <div v-for="book in searchResults" :key="book.id" class="card search-result-card mb-3">
+            <img :src="book.image_url" class="card-img-top img-fluid book-image" alt="Book Image">
+            <div class="card-body">
+              <h5 class="card-title"><b>{{ book.name }}</b></h5>
+              <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
+              <p class="card-text"><strong>Section:</strong> {{ book.section }}</p>
+              <div v-if="book.averageRating !== undefined" class="star-rating-container">
+                <p class="card-text"><strong>Rating:</strong></p>
+                <div class="star-rating">
+                  <span v-for="star in 5" :class="{ filled: star <= book.averageRating }">&#9733;</span>
                 </div>
-                <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to Issue</button>
               </div>
+              <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to
+                Issue</button>
             </div>
           </div>
         </div>
@@ -34,17 +33,16 @@
     </div>
 
     <!-- Recently Added Books -->
+    <div class="col-lg-12 mb-2">
+      <h2 class="text-center mb-4"><u>Recently Added Books</u></h2>
+    </div>
     <div class="row">
-      <div class="col-lg-12 mb-4">
-        <h2 class="text-center mb-4"><u>Recently Added Books</u></h2>
-      </div>
-      
-      <div class="d-flex flex-wrap justify-content-center">
-        <div v-for="book in recentlyAddedBooks" :key="book.id" class="col-lg-3 mb-4">
-          <div class="card recent-book-card">
-            <div class="card-img-top half">
-              <img :src="book.image_url" class="card-img-top img-fluid" alt="Book Image">
-            </div>
+
+
+      <div class="d-flex flex-wrap ">
+        <div v-for="book in recentlyAddedBooks" :key="book.id" class="col-lg-2 m-1">
+          <div class="card-body d-flex flex-column border ">
+            <img :src="book.image_url" class="card-img-top book-image" alt="Book Image">
             <div class="card-body">
               <h5 class="card-title"><b>{{ book.name }}</b></h5>
               <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
@@ -56,7 +54,8 @@
                   <span v-for="star in 5" :class="{ filled: star <= book.averageRating }">&#9733;</span>
                 </div>
               </div>
-              <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to Issue</button>
+              <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to
+                Issue</button>
             </div>
           </div>
         </div>
@@ -70,9 +69,9 @@
       </div>
 
       <div class="d-flex flex-wrap justify-content-center">
-        <div v-for="book in topRatedBooks" :key="book.id" class="col-lg-3 mb-4">
+        <div v-for="book in topRatedBooks" :key="book.id" class="col-lg-4 mb-4">
           <div class="card top-issued-book-card">
-            <img :src="book.image_url" class="card-img-top img-fluid" alt="Book Image">
+            <img :src="book.image_url" class="card-img-top img-fluid book-image" alt="Book Image">
             <div class="card-body">
               <h5 class="card-title"><b>{{ book.name }}</b></h5>
               <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
@@ -84,7 +83,8 @@
                   <span v-for="star in 5" :class="{ filled: star <= book.averageRating }">&#9733;</span>
                 </div>
               </div>
-              <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to Issue</button>
+              <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to
+                Issue</button>
             </div>
           </div>
         </div>
@@ -97,13 +97,13 @@
         <h2 class="text-center mb-4"><u>Explore Library...</u></h2>
       </div>
 
-      <div v-for="section in sections" :key="section.id" class="col-lg-12 mb-4">
+      <div v-for="section in sections" :key="section.id" class="col-lg-4 mb-4">
         <div class="section-heading mb-3">
           <h3>{{ section.name }}</h3>
         </div>
         <div class="card-deck">
-          <div v-for="book in getBooksBySection(section.id)" :key="book.id" class="card col-lg-3 mb-4">
-            <img :src="book.image_url" class="card-img-top img-fluid" alt="Book Image">
+          <div v-for="book in getBooksBySection(section.id)" :key="book.id" class="card mb-3">
+            <img :src="book.image_url" class="card-img-top img-fluid book-image" alt="Book Image">
             <div class="card-body">
               <h5 class="card-title"><b>{{ book.name }}</b></h5>
               <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
@@ -115,7 +115,8 @@
                   <span v-for="star in 5" :class="{ filled: star <= book.averageRating }">&#9733;</span>
                 </div>
               </div>
-              <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to Issue</button>
+              <button @click="requestToIssue(book.id)" class="btn btn-primary btn-sm request-btn">Request to
+                Issue</button>
             </div>
           </div>
         </div>
@@ -204,29 +205,29 @@ export default {
         try {
           const response = await this.$axios.get(`/book/rating/${book.id}`);
           const ratingsData = response.data;
-          
+
           // Check if ratings property exists in the API response
           if (Array.isArray(ratingsData.ratings)) {
             const ratings = ratingsData.ratings;
             console.log('Ratings for Book', book.id, ':', ratings);
-          
+
             // Calculate average rating
-          if (ratings.length > 0) {
-            const averageRating = ratings.reduce((sum, rating) => sum + rating.rating_value, 0) / ratings.length;
-            console.log('Average Rating for Book', book.id, ':', averageRating);
-            
-            // Add averageRating property to the book object
-            book.averageRating = averageRating;
+            if (ratings.length > 0) {
+              const averageRating = ratings.reduce((sum, rating) => sum + rating.rating_value, 0) / ratings.length;
+              console.log('Average Rating for Book', book.id, ':', averageRating);
+
+              // Add averageRating property to the book object
+              book.averageRating = averageRating;
+            } else {
+              console.log('No Ratings for Book', book.id);
+            }
           } else {
             console.log('No Ratings for Book', book.id);
           }
-        } else {
-          console.log('No Ratings for Book', book.id);
+        } catch (error) {
+          console.error(`Failed to fetch ratings for book ${book.id}:`, error);
         }
-      } catch (error) {
-        console.error(`Failed to fetch ratings for book ${book.id}:`, error);
       }
-      }  
     },
     getBooksBySection(sectionId) {
       // Filter books by section
@@ -252,3 +253,12 @@ export default {
 };
 </script>
 
+<style>
+.book-image {
+  height: 325px;
+}
+
+.card-body {
+  padding: 15px;
+}
+</style>

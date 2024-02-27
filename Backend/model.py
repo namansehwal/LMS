@@ -20,15 +20,6 @@ class User(db.Model):
         self.password = password
         self.user_type = user_type
 
-
-class Blacklist(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    token = db.Column(db.String(500), nullable=False)
-
-    def __init__(self, token):
-        self.token = token
-
-
 class Section(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False)
