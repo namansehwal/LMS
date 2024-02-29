@@ -10,11 +10,7 @@ User
           <h1>🏛️ Library 🏛️ </h1>
         </router-link>
 
-        <!-- Search Box -->
-        <div class="search-box d-flex">
-          <input type="text" class="form-control" placeholder="Search..." v-model="searchQuery" @input="updateSearchQuery">
-          <h1 class="m-1"><a class="pe-auto text-decoration-none" @click="searchBooks">🧐</a></h1>
-        </div>
+
 
         <!-- Logout Button -->
         <button @click="logout" class="btn btn-danger ml-auto">Logout</button>
@@ -30,70 +26,122 @@ User
     <!-- Sidebar Menu -->
     <div v-if="sidebarVisible" class="sidebar">
       <div class="sidebar-header">
-        <router-link to="/user/books" class="text-decoration-none text-muted"><h2>📖 Books</h2></router-link>
+        <router-link to="/user/books" class="text-decoration-none text-muted">
+          <h2>📖 Books</h2>
+        </router-link>
       </div>
       <div class="sidebar-header">
-        <router-link to="/user/profile" class="text-decoration-none text-muted"><h2>👤 Profile</h2></router-link>
+        <router-link to="/user/profile" class="text-decoration-none text-muted">
+          <h2>👤 Profile</h2>
+        </router-link>
       </div>
       <div class="sidebar-header">
-        <router-link to="/user/space" class="text-decoration-none text-muted"><h2>🚀 My Space</h2></router-link>
+        <router-link to="/user/space" class="text-decoration-none text-muted">
+          <h2>🚀 My Space</h2>
+        </router-link>
       </div>
       <div class="sidebar-header">
-        <router-link to="/user/read" class="text-decoration-none text-muted"><h2>😴 Read</h2></router-link>
-      </div>  
+        <router-link to="/user/read" class="text-decoration-none text-muted">
+          <h2>😴 Read</h2>
+        </router-link>
+      </div>
     </div>
 
     <!-- Main Content -->
     <div class="main-content " :style="{ marginLeft: sidebarVisible ? '250px' : '0' }">
       <router-view></router-view>
-      <div  class="text-muted" v-if="$route.path === '/user'">
-      <h1 class="m-2">Welcome to the Library</h1>
-      <hr>
-      <p class="h2">You can search for books, view your profile, and manage your space from the sidebar.</p>
-      <br><br><br><br><br>
-      <h3 class="m-1 h1">📚 Policy:</h3>
-      <p class="m-5 h2"> ⚝ You can borrow a maximum of 5 books at a time.</p>
-      <p class="m-5 h2">⚝ You can keep the books for a maximum of 7 days.</p> 
-    </div>
+      <div class="text-muted" v-if="$route.path === '/user'">
+        <h1 class="m-2">Welcome to the Library</h1>
+        <hr>
+        <p class="h2">You can search for books, view your profile, and manage your space from the sidebar.</p>
+        <br>
+        <!-- Search Box -->
+        <div class="container mt-5 ">
+          <div class="row">
+            <div class="col-md-12">
+              <form @submit.prevent="searchProducts" class="form-inline w-100">
+                <div class="form-group">
+                  <label for="searchCriteria">Search by:</label>
+                  <select v-model="searchCriteria" class="form-control" id="searchCriteria">
+                    <option value="category">Category</option>
+                    <option value="author">Author</option>
+                    <option value="name">Name</option>
+                  </select>
+                </div>
+                <div v-if="searchCriteria === 'category'" class="form-group col-md-7">
+                  <label for="category">Category:</label>
+                  <select v-model="searchValue" class="form-control" id="category" :placeholder="'Select a category'">
+                    <option value="" disabled>Select a category</option>
+                    <option v-for="category in categories" :key="category.id" :value="category.id">
+                      {{ category.name }}
+                    </option>
+                  </select>
+                </div>
+                <div v-else class="form-group col-md-7"
+                  :style="{ 'max-width': searchCriteria === 'manufactureDate' ? '100%' : 'initial' }">
+                  <label :for="searchCriteria">{{ capitalize(searchCriteria) }}:</label>
+                  <input :type="inputType" v-model="searchValue" class="form-control" :id="searchCriteria"
+                    :placeholder="'Enter ' + capitalize(searchCriteria)" />
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Search</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <br><br><br><br>
+
+        <h3 class="m-1 h1">📚 Policy:</h3>
+        <p class="m-5 h2"> ⚝ You can borrow a maximum of 5 books at a time.</p>
+        <p class="m-5 h2">⚝ You can keep the books for a maximum of 7 days.</p>
+      </div>
     </div>
   </div>
 </template>
 
+
 <script>
-import { ref } from 'vue';
-import { useStore } from 'vuex';
+import axios from 'axios'
 
 export default {
-  setup() {
-    const store = useStore();
-    const searchQuery = ref('');
-
-    const searchBooks =  async () => {
-      console.log('Search books method called');
-      try {
-        await store.dispatch('searchBooks', searchQuery.value);
-        searchQuery.value = '';
-      } catch (error) {
-        console.error('Error searching books:', error);
-      }
-    };
-
-    const updateSearchQuery = () => {
-      store.commit('setSearchQuery', searchQuery.value);
-    };
-
-    return {
-      searchQuery,
-      searchBooks,
-      updateSearchQuery,
-    };
-  },
   data() {
     return {
       sidebarVisible: false,
-    };
+      searchCriteria: 'category',
+      searchValue: '',
+      categories: [] // New property to store categories
+    }
+  },
+  created() {
+    this.fetchCategories()
   },
   methods: {
+    async fetchCategories() {
+      try {
+        const response = await this.$axios.get('/section')
+        this.categories = response.data
+      } catch (error) {
+        console.error('Error fetching categories:', error)
+      }
+    },
+    searchProducts() {
+      // Define the query parameter keys based on the selected search criteria
+      const queryParamKeys = {
+        category: 'category',
+        author: 'author',
+        name: 'name'
+      }
+      // alert(this.searchCriteria)
+      // Build the params object with the correct key
+      const params = {
+        [queryParamKeys[this.searchCriteria]]: this.searchValue
+      }
+      alert(this.searchValue)
+      // Redirect to the same page with the updated query params
+      this.$router.push({ name: 'UserProduct', query: params })
+    },
+    capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1)
+    },
     toggleSidebar() {
       this.sidebarVisible = !this.sidebarVisible;
     },
@@ -101,10 +149,18 @@ export default {
       localStorage.clear();
       location.reload();
     },
+    searchBooks() {
+      this.$router.push({ path: '/user/books', query: { search: this.searchQuery } });
+    },
   },
-};
+  computed: {
+    inputType() {
+      // Determine the input type based on the selected search criteria
+      return this.searchCriteria === 'manufactureDate' ? 'date' : 'text'
+    }
+  }
+}
 </script>
-
 <style scoped>
 /* Add your custom styles here */
 .img {

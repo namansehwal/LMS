@@ -2,7 +2,7 @@
   <div class="container mt-3">
 
     <!-- Add Book Form -->
-    <div class="card mt-4 mb-4" style="width: 30%;">
+    <div class="card mt-4 mb-4" style="width: 50%;">
       <div class="card-header bg-primary text-white">
         Add Book
       </div>
@@ -58,7 +58,7 @@
     </div>
 
     <!-- Display Books -->
-    <div class="card mt-4 mb-4" style="width: 50%;">
+    <div class="card mt-4 mb-4" style="width: 100%; ">
       <div class="card-header bg-info text-white">
         All Books
       </div>
@@ -267,9 +267,9 @@ export default {
 
 <style scoped>
 .table tbody tr td {
-  white-space: nowrap;
+  /* white-space: nowrap; */
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: clip;
 }
 
 .table tbody tr td:last-child {
@@ -281,7 +281,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: left;
-  min-height: 50vh;
+  min-height: 90vh;
   overflow: auto;
 }
 
@@ -296,7 +296,7 @@ export default {
 }
 
 .card-body {
-  max-height: 500px;
+  /* max-height: 500px; */
   overflow-y: auto;
 }
 

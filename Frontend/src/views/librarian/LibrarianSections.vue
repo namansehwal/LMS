@@ -1,8 +1,8 @@
 <template>
-  <div class="container mt-3">
+  <div class="container ">
 
     <!-- Add Section Form -->
-    <div class="card mt-4 mb-4" style="width: 25%;">
+    <div class="card mt-4 addsec">
       <div class="card-header bg-primary text-white">
         Add Section
       </div>
@@ -22,12 +22,12 @@
     </div>
 
     <!-- Display Sections -->
-    <div class="card mt-4 mb-4" style="width: 50%;">
+    <div class="card mt-4 dissec ">
       <div class="card-header bg-info text-white">
         All Sections
       </div>
-      <div class="card-body">
-        <table class="table table-striped table-hover">
+      <div class="">
+        <table class="table table-striped ">
           <thead>
             <tr>
               <th>ID</th>
@@ -52,7 +52,7 @@
     </div>
 
     <!-- Edit Section Form -->
-    <div v-if="editingSection" class="card mt-4 mb-4">
+    <div v-if="editingSection" class="card mt-4 mb-4 esf">
       <div class="card-header bg-success text-white">
         Edit Section
       </div>
@@ -146,7 +146,7 @@ export default {
 
 <style scoped>
 .table tbody tr td {
-  white-space: nowrap;
+  /* white-space: nowrap; */
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -155,14 +155,26 @@ export default {
   white-space: nowrap;
 }
 
+.addsec {
+  width: 50%;
+  /* margin: auto; */
+  margin-left: 10px;
+
+}
+
+
+.esf {
+  width: 50%;
+
+}
 
 /* Center the card in the middle of the page */
 .container {
   display: flex;
-  justify-content: center;
-  align-items: left;
-  min-height: 50vh;
-  overflow: auto;
+  margin-left: 120px;
+  width: 120%;
+
+
 }
 
 /* Add some spacing to the buttons for better readability */
@@ -176,7 +188,8 @@ export default {
 }
 
 .card-body {
-  max-height: 500px;
+  max-height: 100vh;
+
   overflow-y: auto;
 }
 
@@ -184,7 +197,7 @@ export default {
 .card-header.bg-primary,
 .card-header.bg-info,
 .card-header.bg-success {
-  text-align: center;
+  /* text-align: center; */
   font-size: 1.2rem;
 }
 
@@ -202,10 +215,5 @@ export default {
 /* Style alternating rows in the table */
 .table-striped tbody tr:nth-child(odd) {
   background-color: #f8f9fa;
-}
-
-/* Hover effect for table rows */
-.table-hover tbody tr:hover {
-  background-color: #e2e6ea;
 }
 </style>
