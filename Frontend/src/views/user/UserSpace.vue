@@ -81,10 +81,11 @@
                 PDF for ₹{{ accessLog.price }}</button>
               <button class="btn btn-danger m-1" v-if="accessLog.status === 'Issued'"
                 @click="read(accessLog.book_id)">Read</button>
-              <span v-else-if="accessLog.status === 'Returned'" class="returned-date">Returned on {{ accessLog.return_date
-              }}</span>
+              <span v-else-if="accessLog.status === 'Returned'" class="returned-date">Returned on {{
+      accessLog.return_date
+    }}</span>
               <span v-else-if="accessLog.status === 'Revoked'" class="revoked-date">Revoked on {{ accessLog.revoke_date
-              }}</span>
+                }}</span>
               <span v-else>{{ accessLog.status }}</span>
             </td>
           </tr>
@@ -97,9 +98,9 @@
     </div>
   </div>
 </template>
-  
-  
-  
+
+
+
 <script>
 export default {
   data() {
@@ -272,9 +273,9 @@ export default {
   },
 };
 </script>
-  
-  
-  
+
+
+
 <style scoped>
 .table {
   width: 90%;
@@ -436,5 +437,3 @@ export default {
   font-weight: bold;
 }
 </style>
-
-  

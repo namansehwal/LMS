@@ -34,8 +34,8 @@
               <td>{{ log.user_id }}</td>
               <td>{{ log.book_id }}</td>
               <td>{{ log.status }}</td>
-              <td>{{ formatDateTime(log.issue_date) }}</td>
-              <td v-if="log.due_date">{{ formatDateTime(log.due_date) }}</td>
+              <td>{{ log.issue_date }}</td>
+              <td v-if="log.due_date">{{ log.due_date }}</td>
               <td v-else>N/A</td>
               <td>
                 <!-- <button v-if="log.status === 'Issued'" class="btn btn-danger btn-sm" @click="revokeAccesss(log.id)">Revoke</button>
@@ -43,12 +43,15 @@
                 <template v-if="log.status === 'Issued'">
                   <button class="btn btn-danger btn-sm" @click="revokeAccesss(log.id)">Revoke</button>
                 </template>
+
                 <template v-else-if="log.status === 'Returned'">
-                  <span class="returned-date">Returned on {{ formatDateTime(log.return_date) }}</span>
+                  <span class="returned-date">Returned on {{ log.return_date }}</span>
                 </template>
+
                 <template v-else-if="log.status === 'Revoked'">
-                  <span class="revoked-date">Revoked on {{ formatDateTime(log.revoke_date) }}</span>
+                  <span class="revoked-date">Revoked on {{ log.revoke_date }}</span>
                 </template>
+
                 <template v-else>
                   N/A
                 </template>
@@ -96,17 +99,6 @@ export default {
       } catch (error) {
         console.error('Revoke Access failed:', error)
       }
-    },
-    formatDateTime(dateTimeString) {
-      const options = {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric'
-      }
-      return new Date(dateTimeString).toLocaleDateString('en-US', options)
     }
   }
 }
@@ -122,7 +114,7 @@ export default {
   margin-top: 20px;
   border: 3px solid #ad9191;
   border-radius: 5px;
-  overflow:hidden;
+  overflow: hidden;
 }
 
 .card-header {
@@ -142,7 +134,7 @@ export default {
   width: 200px;
 }
 
-.table thead th{
+.table thead th {
   vertical-align: bottom;
   border-bottom: 2px solid #7b2bbc;
   border-top: 2px solid #7b2bbc;
@@ -150,7 +142,7 @@ export default {
   border-right: 2px solid #7b2bbc;
   border-style: double;
 }
-  
+
 .table td {
   /* background-color: #b3cdd5; */
   color: rgb(27, 8, 84);
@@ -167,8 +159,8 @@ export default {
 }
 
 .table-bordered td {
-    border: 2px solid #ba96ab;
-    border-style: dashed;
+  border: 2px solid #ba96ab;
+  border-style: dashed;
 }
 
 .table tbody {
@@ -191,13 +183,14 @@ export default {
 }
 
 .returned-date {
-  color: #4CAF50; /* Green */
+  color: #4CAF50;
+  /* Green */
   font-weight: bold;
 }
 
 .revoked-date {
-  color: #ff00f2; /* Red */
+  color: #ff00f2;
+  /* Red */
   font-weight: bold;
 }
-
 </style>

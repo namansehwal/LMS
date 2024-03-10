@@ -105,7 +105,8 @@ export default {
       sidebarVisible: false,
       searchCriteria: 'category',
       searchValue: '',
-      categories: [] // New property to store categories
+      categories: [], // New property to store categories
+      role: localStorage['role']
     }
   },
   created() {

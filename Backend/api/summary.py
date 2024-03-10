@@ -15,7 +15,7 @@ class SummaryAPI(Resource):
 
             # Calculate total books
             total_books = Book.query.count()
-            unavailable = Book.query.filter(Book.id < 1).count()
+         
 
             # Calculate total sections
             total_sections = Section.query.count()
@@ -23,17 +23,11 @@ class SummaryAPI(Resource):
             # Calculate total book requests
             total_book_requests = BookRequest.query.count()
 
-            # Calculate total access logs
-            total_access_logs = AccessLog.query.count()
-
+  
             # Calculate total ratings
             total_ratings = Rating.query.count()
 
-            # Calculate total overdue books
-            overdue_books = AccessLog.query.filter(AccessLog.status == "Issued", AccessLog.due_date < datetime.now()).count()
-
-            #total penalty
-            total_penalty = int(round(overdue_books * 25))
+          
             
             # Calculate total issued books
             total_issued_books = AccessLog.query.filter(AccessLog.status == "Issued").count()
@@ -41,14 +35,7 @@ class SummaryAPI(Resource):
             # Calculate total returned books
             total_returned_books = AccessLog.query.filter(AccessLog.status == "Returned").count()
 
-            # Calculate total book copies
-            total_book_copies = func.sum(Book.number_of_pages).label("total_pages")
-            result = (
-                db.session.query(total_book_copies)
-                .filter(Book.id.in_(AccessLog.query.filter(AccessLog.status == "Issued").with_entities(AccessLog.book_id)))
-                .first()
-            )
-            total_pages = result.total_pages if result else 0
+        
 
             # Calculate section-wise book count
             section_wise_book_count = {}
@@ -79,16 +66,14 @@ class SummaryAPI(Resource):
             result = {
                 "total_users": total_users,
                 "total_books": total_books,
-                "unavailable": unavailable,
+       
                 "total_sections": total_sections,
                 "total_book_requests": total_book_requests,
-                "total_access_logs": total_access_logs,
+   
                 "total_ratings": total_ratings,
-                "overdue_books": overdue_books,
-                "total_penalty": total_penalty,
+         
                 "total_issued_books": total_issued_books,
                 "total_returned_books": total_returned_books,
-                "total_book_copies": total_pages,
                 "section_wise_book_count": section_wise_book_count,
                 "top_books": top_books,
             }
