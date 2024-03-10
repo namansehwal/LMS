@@ -59,7 +59,11 @@
         <hr>
         <p class="h2">You can manage sections, books, access logs, requests, and view stats and graphs from the sidebar.
         </p>
+        <br><br><br><br>
 
+        <h3 class="m-1 h1">📚 Policy:</h3>
+        <p class="m-5 h2"> ⚝ User can borrow a maximum of 5 books at a time.</p>
+        <p class="m-5 h2">⚝ User can keep the books for a maximum of 7 days.</p>
 
 
       </div>
@@ -122,4 +126,5 @@ export default {
   transition: margin-left 0.3s;
   padding: 20px;
   margin-top: 60px;
-}</style>
+}
+</style>

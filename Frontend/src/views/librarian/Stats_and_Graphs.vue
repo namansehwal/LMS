@@ -30,10 +30,10 @@
                   <div class="row align-items-center no-gutters">
                     <div class="col me-2">
                       <div class="text-uppercase text-success fw-bold text-xs mb-1">
-                        <span class="fs-5">Total Sections:</span>
+                        <span class="fs-5">Total Sections: </span>
                       </div>
                       <div class="text-dark fw-bold h5 mb-0">
-                        <span> {{ res.total_sections }}</span>
+                        <span>{{ res.total_sections }}</span>
                       </div>
                     </div>
                     <div class="col-auto">
@@ -54,7 +54,7 @@
                       <div class="row g-0 align-items-center">
                         <div class="col-auto">
                           <div class="text-dark fw-bold h5 mb-0 me-3">
-                            <span>{{ res.total_books }}</span>
+                            <span>{{ res.total_books }} </span>
                           </div>
                         </div>
                       </div>
@@ -218,7 +218,8 @@ export default {
           }
         }
       });
-
+      // ctx.canvas.width = container.clientWidth;
+      // ctx.canvas.height = container.clientHeight;
     }
   }
 }
