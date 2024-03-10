@@ -11,7 +11,16 @@ def bookAPI():
         books_query = Book.query.all()
         books = []
         for book in books_query:
-            books.append(book.__serialize__())
+            book_dict = book.__serialize__()
+            book_ratings = Rating.query.filter_by(book_id=book.id).all()
+            ratings = [rating.rating_value for rating in book_ratings]
+            if ratings:
+                average_rating = sum(ratings) // len(ratings)
+                book_dict["rating"] = average_rating
+            else:
+                book_dict["rating"] = 0    
+            books.append(book_dict)
+            
         return jsonify(books), 200
 
     if request.method == "POST":

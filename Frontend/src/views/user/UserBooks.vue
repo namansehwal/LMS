@@ -16,7 +16,7 @@
               <div class="card-body d-flex flex-column">
                 <h5 class="card-title">{{ book.name }} </h5>
                 <I>
-                  Rating: {{ '⭐'.repeat(4) }}
+                  Rating: {{ book.rating === 0 ? '❌ Unrated' : '⭐'.repeat(book.rating) }}
                   <p class="">
                     <span class="author-label">✍️ :</span> {{ book.author }}
                   </p>
@@ -30,7 +30,7 @@
                 </p>
                 <!-- Issue Button -->
                 <div class="mt-auto">
-                  <button class="btn btn-success mt-2" @click="issueBook(book)">Issue</button>
+                  <button class="btn btn-success mt-2" @click="issueBook(book)"> Request To Issue</button>
                 </div>
               </div>
             </div>
@@ -45,24 +45,29 @@
       <h3 :id=sectionId>{{ section.name }}</h3>
       <div class="row">
         <div v-for="book in section.books" :key="book.id" class="col-lg-2 col-md-4 col-sm-6 mb-4">
-          <div class="card h-100">
-            <img :src="book.image_url" class="card-img-top book-image" alt="Book Image" />
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">{{ book.name }}</h5>
-              <div>
-                <p class="card-text">
-                  <span class="author-label">Author:</span> {{ book.author }}
-                </p>
-                <p class="card-text">
-                  <span class="price-label">Price:</span> ₹{{ book.price }}
-                </p>
-                <!-- Issue Button -->
-                <div class="mt-auto">
-                  <button class="btn btn-success mt-2" @click="issueBook(book)">Issue</button>
-                </div>
-              </div>
-            </div>
-          </div>
+         <div class="card h-100">
+                    <img :src="book.image_url" class="card-img-top book-image" alt="Book Image" />
+                    <div class="card-body d-flex flex-column">
+                      <h5 class="card-title">{{ book.name }} </h5>
+                      <I>
+                        Rating: {{ '⭐'.repeat(book.rating) }}
+                        <p class="">
+                          <span class="author-label">✍️ :</span> {{ book.author }}
+                        </p>
+                        <p>
+                          <span class="price-label">🏷️:</span> ₹{{ book.price }} ,
+                          <span>🗐 : {{ book.number_of_pages }}</span>
+                        </p>
+                      </I>
+                      <p class="card-text">
+                        <label for="section"><B>Description:</B></label><BR /> {{ book.content }}
+                      </p>
+                      <!-- Issue Button -->
+                      <div class="mt-auto">
+                        <button class="btn btn-success mt-2" @click="issueBook(book)"> Request To Issue</button>
+                      </div>
+                    </div>
+                  </div>
         </div>
       </div>
     </div>
@@ -162,7 +167,10 @@ export default {
               author: book.author,
               price: book.price,
               image_url: book.image_url,
-              category: book.category // Include the category name if needed
+              category: book.category,
+              number_of_pages: book.number_of_pages,
+              rating: book.rating,
+              content: book.content
             });
           }
         }
@@ -185,6 +193,9 @@ export default {
           await this.$axios.post('/book/request', {
             book_id: book.id,
             user_id: localStorage.getItem('user_id'),
+          }).then((response) => {
+            console.log(response);
+            alert(response.data.message);
           });
           // Handle success
         } catch (error) {
