@@ -14,16 +14,19 @@
             <div class="card h-100">
               <img :src="book.image_url" class="card-img-top book-image" alt="Book Image" />
               <div class="card-body d-flex flex-column">
-                <h5 class="card-title">{{ book.name }}</h5>
-
+                <h5 class="card-title">{{ book.name }} </h5>
+                <I>
+                  Rating: {{ '⭐'.repeat(4) }}
+                  <p class="">
+                    <span class="author-label">✍️ :</span> {{ book.author }}
+                  </p>
+                  <p>
+                    <span class="price-label">🏷️:</span> ₹{{ book.price }} ,
+                    <span>🗐 : {{ book.number_of_pages }}</span>
+                  </p>
+                </I>
                 <p class="card-text">
-                  <span class="author-label">Author:</span> {{ book.author }}
-                </p>
-                <p class="card-text">
-                  <span class="price-label">Price:</span> ₹{{ book.price }}
-                </p>
-                <p class="card-text">
-                  <label for="section">Section:</label> {{ book.section }}
+                  <label for="section"><B>Description:</B></label><BR /> {{ book.content }}
                 </p>
                 <!-- Issue Button -->
                 <div class="mt-auto">
