@@ -1,4 +1,5 @@
 User
+
 <template>
   <div>
     <!-- Top Navbar -->
@@ -64,8 +65,8 @@ User
                   <label for="searchCriteria">Search by:</label>
                   <select v-model="searchCriteria" class="form-control" id="searchCriteria">
                     <option value="category">Category</option>
-                    <option value="author">Author</option>
-                    <option value="name">Name</option>
+                    <option value="author">Author Name:</option>
+                    <option value="name">Book Name: </option>
                   </select>
                 </div>
                 <div v-if="searchCriteria === 'category'" class="form-group col-md-7">
@@ -131,13 +132,12 @@ export default {
         name: 'name'
       }
       // alert(this.searchCriteria)
-      // Build the params object with the correct key
+
       const params = {
         [queryParamKeys[this.searchCriteria]]: this.searchValue
       }
-      alert(this.searchValue)
       // Redirect to the same page with the updated query params
-      this.$router.push({ name: 'UserProduct', query: params })
+      this.$router.push({ name: 'UserBooks', query: params })
     },
     capitalize(str) {
       return str.charAt(0).toUpperCase() + str.slice(1)
@@ -149,18 +149,11 @@ export default {
       localStorage.clear();
       location.reload();
     },
-    searchBooks() {
-      this.$router.push({ path: '/user/books', query: { search: this.searchQuery } });
-    },
-  },
-  computed: {
-    inputType() {
-      // Determine the input type based on the selected search criteria
-      return this.searchCriteria === 'manufactureDate' ? 'date' : 'text'
-    }
+
   }
 }
 </script>
+
 <style scoped>
 /* Add your custom styles here */
 .img {
