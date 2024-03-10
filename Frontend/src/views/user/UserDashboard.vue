@@ -56,18 +56,19 @@ User
         <div class="container mt-5 ">
           <div class="row">
             <div class="col-md-12">
-              <form @submit.prevent="searchProducts" class="form-inline w-100">
+              <form @submit.prevent="searchProducts" class="form-inline w-50">
                 <div class="form-group">
-                  <label for="searchCriteria">Search by:</label>
+                  <label for="searchCriteria"><b>Search by:</b></label>
                   <select v-model="searchCriteria" class="form-control" id="searchCriteria">
                     <option value="category">Category</option>
-                    <option value="author">Author Name:</option>
-                    <option value="name">Book Name: </option>
+                    <option value="author">Author Name</option>
+                    <option value="name">Book Name</option>
                   </select>
                 </div>
-                <div v-if="searchCriteria === 'category'" class="form-group col-md-7">
-                  <label for="category">Category:</label>
-                  <select v-model="searchValue" class="form-control" id="category" :placeholder="'Select a category'">
+              <br/>
+                <div v-if="searchCriteria === 'category'" class="form-group">
+                  <label for="category"><b>Category:</b></label>
+                  <select v-model="searchValue" class="form-control" id="category" :placeholder="'Select a category'" required>
                     <option value="" disabled>Select a category</option>
                     <option v-for="category in categories" :key="category.id" :value="category.id">
                       {{ category.name }}
@@ -78,7 +79,7 @@ User
                   :style="{ 'max-width': searchCriteria === 'manufactureDate' ? '100%' : 'initial' }">
                   <label :for="searchCriteria">{{ capitalize(searchCriteria) }}:</label>
                   <input :type="inputType" v-model="searchValue" class="form-control" :id="searchCriteria"
-                    :placeholder="'Enter ' + capitalize(searchCriteria)" />
+                    :placeholder="'Enter ' + capitalize(searchCriteria)" required/>
                 </div>
                 <button type="submit" class="btn btn-primary mt-3">Search</button>
               </form>
