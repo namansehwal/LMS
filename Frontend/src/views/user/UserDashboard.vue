@@ -41,11 +41,7 @@ User
           <h2>🚀 My Space</h2>
         </router-link>
       </div>
-      <div class="sidebar-header">
-        <router-link to="/user/read" class="text-decoration-none text-muted">
-          <h2>😴 Read</h2>
-        </router-link>
-      </div>
+
     </div>
 
     <!-- Main Content -->

@@ -39,7 +39,7 @@
     <!-- Section-wise Books Section -->
     <div v-for="(section, sectionId) in sections" :key="sectionId">
       <hr />
-      <h3>{{ section.name }}</h3>
+      <h3 :id=sectionId>{{ section.name }}</h3>
       <div class="row">
         <div v-for="book in section.books" :key="book.id" class="col-lg-2 col-md-4 col-sm-6 mb-4">
           <div class="card h-100">
@@ -67,7 +67,6 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
@@ -83,15 +82,36 @@ export default {
   },
   computed: {
     hasQueryParams() {
-      // if no book is found
-      if (Object.keys(this.sections).length == 0) {
-        this.search_message = 'No book found'
+      // Check if queryParams exist
+      if (Object.keys(this.queryParams).length > 0) {
+        const key = Object.keys(this.queryParams)[0];
+        const value = this.queryParams[key];
+
+        console.log(key, value);
+
+        if (key === 'category') {
+
+
+          this.search_message = ``;
+          return true;
+        } else if (key === 'author') {
+          // Scroll to the section with id equal to the author value
+
+          this.search_message = `Books by Author ${value}`;
+          return true;
+        } else if (key === 'name') {
+          // Scroll to the section with id equal to the name value
+
+          this.search_message = `Books with Name ${value}`;
+          return true;
+        } else {
+          console.log("Invalid query parameter");
+          return false;
+        }
       } else {
-        // Handle search message based on query parameters
+        console.log("No query parameters found.");
+        return false;
       }
-
-      return Object.keys(this.queryParams).length > 0;
-
     },
   },
   methods: {
@@ -100,38 +120,37 @@ export default {
         const bookResponse = await this.$axios.get('/book');
         const sectionResponse = await this.$axios.get('/section');
 
-        this.processBooks(bookResponse.data, sectionResponse.data, this.$route.query)
-        this.sortRecentlyAdded(bookResponse.data)
+        this.processBooks(bookResponse.data, sectionResponse.data, this.$route.query);
+        this.sortRecentlyAdded(bookResponse.data);
       } catch (error) {
-        console.error('Error fetching books:', error)
+        console.error('Error fetching books:', error);
       }
     },
     sortRecentlyAdded(books) {
       // Sort and limit to 5 recently added books that is last 5 books and convert book object to array
       this.recentlyAdded = Object.values(books)
         .sort((a, b) => b.id - a.id)
-        .slice(0, 5)
+        .slice(0, 5);
     },
     processBooks(books, sections, queryParams) {
-      // Assuming books is an array of books as received from the API
-      this.sections = {}
+      this.sections = {};
 
       for (const section of Object.values(sections)) {
-        const sectionId = section.id.toString()
+        const sectionId = section.id.toString();
         this.sections[sectionId] = {
           name: section.name,
           books: []
-        }
+        };
       }
 
       for (const book of Object.values(books)) {
-        const sectionId = book.section_id.toString()
+        const sectionId = book.section_id.toString();
 
-        // Check if the book matches the filter criteria
+        // Check if the book matches the filter criteria based on query parameters
         if (
-          (!queryParams.section_id || sectionId === queryParams.section_id) &&
-          (!queryParams.price || parseFloat(book.price) <= parseFloat(queryParams.price))
-          // Add more filters as needed
+          (!queryParams.category || book.section_id === parseInt(queryParams.category)) &&
+          (!queryParams.author || book.author.toLowerCase().includes(queryParams.author.toLowerCase())) &&
+          (!queryParams.name || book.name.toLowerCase().includes(queryParams.name.toLowerCase()))
         ) {
           if (this.sections[sectionId]) {
             this.sections[sectionId].books.push({
@@ -139,15 +158,26 @@ export default {
               name: book.name,
               author: book.author,
               price: book.price,
-              image_url: book.image_url
-            })
+              image_url: book.image_url,
+              category: book.category // Include the category name if needed
+            });
           }
         }
       }
-    },
+
+      // Remove empty categories from sections
+      for (const sectionId in this.sections) {
+        if (this.sections[sectionId].books.length === 0) {
+          delete this.sections[sectionId];
+        }
+      }
+    }
+
+
+    ,
     issueBook(book) {
       // Implement issue book logic here
-      ; (async () => {
+      (async () => {
         try {
           await this.$axios.post('/book/request', {
             book_id: book.id,
@@ -155,10 +185,10 @@ export default {
           });
           // Handle success
         } catch (error) {
-          console.error('Error issuing book:', error)
+          console.error('Error issuing book:', error);
         }
-      })()
-    },
+      })();
+    }
   }
 }
 </script>
