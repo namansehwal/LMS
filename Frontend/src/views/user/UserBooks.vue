@@ -8,7 +8,7 @@
         </center>
       </div>
       <div v-if="recentlyAdded.length && !hasQueryParams" class="mb-5">
-        <h3>Recently Added Books</h3>
+        <hr><hr><b><center><h2><u><marquee behavior="scroll" direction="left" scrollamount="20">Recently Added Books</marquee></u></h2></center></b><hr><hr>
         <div class="row">
           <div v-for="book in recentlyAdded" :key="book.id" class="col-lg-2">
             <div class="card h-100">
@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-
+<hr><hr><b><center><h2><u><marquee behavior="scroll" direction="left" scrollamount="20">Category-Wise Books</marquee></u></h2></center></b><hr>
     <!-- Section-wise Books Section -->
     <div v-for="(section, sectionId) in sections" :key="sectionId">
       <hr />

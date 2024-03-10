@@ -21,7 +21,7 @@
               <td>{{ request.id }}</td>
               <td>{{ request.username }}</td>
               <td>{{ request.book_name }}</td>
-              <td>{{ formatRequestDate(request.request_date) }}</td>
+              <td>{{ request.request_date }}</td>
               <td>{{ request.status }}</td>
               <td>
                 <button @click="acceptRequest(request.id)" class="btn btn-warning btn-sm m-1">
@@ -57,7 +57,7 @@
               <td>{{ request.id }}</td>
               <td>{{ request.username }}</td>
               <td>{{ request.book_name }}</td>
-              <td>{{ formatRequestDate(request.request_date) }}</td>
+              <td>{{ request.request_date }}</td>
               <td>{{ request.status }}</td>
             </tr>
           </tbody>
