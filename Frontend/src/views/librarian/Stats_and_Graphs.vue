@@ -87,19 +87,19 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-lg-7 col-xl-8">
+            <div class="col-lg-7 col-xl-4">
               <div class="card shadow mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                   <h6 class="text-primary fw-bold m-1">Top 5 most issued books</h6>
                 </div>
                 <div class="card-body m-2">
-                  <div class="chart-area" style="width: 1100px; height: 550px">
+                  <div class="chart-area" style="width: 100%; height: 100%">
                     <canvas id="barchart"></canvas>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-lg-5 col-xl-4">
+            <div class="col-lg-5 col-xl-8">
               <div class="card shadow mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                   <h6 class="text-primary fw-bold m-1">Number of books in each section</h6>
@@ -150,81 +150,72 @@ export default {
         console.error(error)
       }
     },
-    shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]]; // swap elements
-      }
-      return array;
-    },
+
     renderPolarChart() {
       const ctx = document.getElementById('polar-chart').getContext('2d');
       const sections = this.res.section_wise_book_count;
 
-      new Chart(ctx, {
-        type: 'polarArea',
-        data: {
-          labels: this.shuffleArray(Object.keys(sections)),
-          datasets: [{
-            data: this.shuffleArray(Object.values(sections)),
+      const colors = [
+        'rgba(255, 99, 132, 0.2)',   // Red
+        'rgba(54, 162, 235, 0.2)',    // Blue
+        'rgba(255, 206, 86, 0.2)',    // Yellow
+        'rgba(75, 192, 192, 0.2)',    // Green
+        'rgba(153, 102, 255, 0.2)',   // Purple
+        'rgba(255, 159, 64, 0.2)',    // Orange
+        'rgba(255, 0, 0, 0.2)',       // Bright Red
+        'rgba(0, 255, 0, 0.2)',       // Bright Green
+        'rgba(0, 0, 255, 0.2)',       // Bright Blue
+        'rgba(255, 255, 0, 0.2)',     // Yellow
+        'rgba(255, 0, 255, 0.2)',     // Magenta
+        'rgba(0, 255, 255, 0.2)',     // Cyan
+        'rgba(128, 0, 128, 0.2)',     // Purple
+        'rgba(255, 140, 0, 0.2)',     // Dark Orange
+        'rgba(0, 128, 128, 0.2)'      // Teal
+      ];
 
-            backgroundColor: this.shuffleArray([
-              'rgba(255, 99, 132, 0.5)',
-              'rgba(255, 159, 64, 0.5)',
-              'rgba(255, 205, 86, 0.5)',
-              'rgba(75, 192, 192, 0.5)',
-              'rgba(54, 162, 235, 0.5)',
-              'rgba(153, 102, 255, 0.5)',
-              'rgba(201, 203, 207, 0.5)'
-            ]),
-            borderWidth: 1
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(sections),
+          datasets: [{
+            data: Object.values(sections),
+            borderWidth: 1,
+            backgroundColor: colors,
+            borderColor: colors,
           }]
         },
-
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              precision: 0,
+              ticks: {
+                stepSize: 0.25
+              }
+            }
+          }
+        }
       });
+
     },
     renderBarChart() {
       const ctx = document.getElementById('barchart').getContext('2d');
       const books = this.res.top_books;
 
       new Chart(ctx, {
-        type: 'bar',
+        type: 'pie',
         data: {
           labels: books.map(book => book.book_name),
           datasets: [{
             label: 'Issued',
             data: books.map(book => book.average_rating),
-            backgroundColor: this.shuffleArray([
-              'rgba(255, 99, 132, 0.5)',
-              'rgba(54, 162, 235, 0.5)',
-              'rgba(255, 206, 86, 0.5)',
-              'rgba(75, 192, 192, 0.5)',
-              'rgba(153, 102, 255, 0.5)',
-              'rgba(255, 159, 64, 0.5)',
-              'rgba(199, 199, 199, 0.5)',
-              'rgba(83, 102, 255, 0.5)',
-              'rgba(40, 159, 64, 0.5)',
-              'rgba(255, 99, 132, 0.5)'
-            ]),
-
-            borderWidth: 1
+            borderWidth: 5
           }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
         }
       });
-      // ctx.canvas.width = container.clientWidth;
-      // ctx.canvas.height = container.clientHeight;
+
     }
   }
 }
 </script>
-
-<style scoped>
-/* Add your custom styles here */
-</style>
