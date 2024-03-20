@@ -56,7 +56,7 @@ User
         <div class="container mt-5 ">
           <div class="row">
             <div class="col-md-12">
-              <form @submit.prevent="searchProducts" class="form-inline w-50">
+              <form @submit.prevent="searchBooks" class="form-inline w-50">
                 <div class="form-group">
                   <label for="searchCriteria"><b>Search by:</b></label>
                   <select v-model="searchCriteria" class="form-control" id="searchCriteria">
@@ -65,21 +65,21 @@ User
                     <option value="name">Book Name</option>
                   </select>
                 </div>
-              <br/>
+                <br />
                 <div v-if="searchCriteria === 'category'" class="form-group">
                   <label for="category"><b>Category:</b></label>
-                  <select v-model="searchValue" class="form-control" id="category" :placeholder="'Select a category'" required>
+                  <select v-model="searchValue" class="form-control" id="category" :placeholder="'Select a category'"
+                    required>
                     <option value="" disabled>Select a category</option>
                     <option v-for="category in categories" :key="category.id" :value="category.id">
                       {{ category.name }}
                     </option>
                   </select>
                 </div>
-                <div v-else class="form-group col-md-7"
-                  :style="{ 'max-width': searchCriteria === 'manufactureDate' ? '100%' : 'initial' }">
+                <div v-else class="form-group col-md-7">
                   <label :for="searchCriteria">{{ capitalize(searchCriteria) }}:</label>
                   <input :type="inputType" v-model="searchValue" class="form-control" :id="searchCriteria"
-                    :placeholder="'Enter ' + capitalize(searchCriteria)" required/>
+                    :placeholder="'Enter ' + capitalize(searchCriteria)" required />
                 </div>
                 <button type="submit" class="btn btn-primary mt-3">Search</button>
               </form>
@@ -122,7 +122,7 @@ export default {
         console.error('Error fetching categories:', error)
       }
     },
-    searchProducts() {
+    searchBooks() {
       // Define the query parameter keys based on the selected search criteria
       const queryParamKeys = {
         category: 'category',
