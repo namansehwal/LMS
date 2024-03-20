@@ -16,26 +16,11 @@ class SummaryAPI(Resource):
             # Calculate total books
             total_books = Book.query.count()
          
-
             # Calculate total sections
             total_sections = Section.query.count()
 
-            # Calculate total book requests
-            total_book_requests = BookRequest.query.count()
-
-  
-            # Calculate total ratings
-            total_ratings = Rating.query.count()
-
-          
-            
             # Calculate total issued books
             total_issued_books = AccessLog.query.filter(AccessLog.status == "Issued").count()
-
-            # Calculate total returned books
-            total_returned_books = AccessLog.query.filter(AccessLog.status == "Returned").count()
-
-        
 
             # Calculate section-wise book count
             section_wise_book_count = {}
@@ -66,14 +51,8 @@ class SummaryAPI(Resource):
             result = {
                 "total_users": total_users,
                 "total_books": total_books,
-       
                 "total_sections": total_sections,
-                "total_book_requests": total_book_requests,
-   
-                "total_ratings": total_ratings,
-         
                 "total_issued_books": total_issued_books,
-                "total_returned_books": total_returned_books,
                 "section_wise_book_count": section_wise_book_count,
                 "top_books": top_books,
             }

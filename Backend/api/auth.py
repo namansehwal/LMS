@@ -53,16 +53,6 @@ def login_user():
                         'user_id': user.id,
                         }), 200
 
-@jwt_required()
-def user_details():
-    return jsonify({"message": "You made it to the secure route.", }), 200
-    # current_user = get_jwt_identity()
-    # # add user id to jwt_identity
-    # current_user["id"] = (
-    #     User.query.filter_by(username=current_user["username"]).first().id
-    # )
-
-    # return jsonify(logged_in_as=current_user), 200
 
 
     

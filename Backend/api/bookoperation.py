@@ -6,7 +6,7 @@ from flask.views import MethodView
 from sqlalchemy import func
 
 
-# @jwt_required()
+@jwt_required()
 def book_request():
     if request.method == "GET":
         books_query = BookRequest.query.all()
