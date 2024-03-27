@@ -144,14 +144,14 @@ export default {
           obj[material.name] = material.value
           return obj
         }, {})
+        this.renderPieChart()
         this.renderBarChart()
-        this.renderPolarChart()
       } catch (error) {
         console.error(error)
       }
     },
 
-    renderPolarChart() {
+    renderBarChart() {
       const ctx = document.getElementById('polar-chart').getContext('2d');
       const sections = this.res.section_wise_book_count;
 
@@ -183,6 +183,7 @@ export default {
             borderWidth: 1,
             backgroundColor: colors,
             borderColor: colors,
+            label: 'Books Count in each section'
           }]
         },
         options: {
@@ -199,7 +200,7 @@ export default {
       });
 
     },
-    renderBarChart() {
+    renderPieChart() {
       const ctx = document.getElementById('barchart').getContext('2d');
       const books = this.res.top_books;
 
