@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required
 from datetime import datetime
 from flask.views import MethodView
 from sqlalchemy import func
-
+from cache import cache
 
 @jwt_required()
 def book_request():
@@ -173,6 +173,7 @@ class BookRating(MethodView):
         return jsonify({"book_id": book_id, "ratings": ratings}), 200
 
     def post(self, book_id):
+        cache.clear()
         data = request.get_json()
         required_keys = ["user_id", "rating_value"]
 
